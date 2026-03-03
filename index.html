@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Кейс · прогресс (клиент)</title>
+  <title>Кейс · стратегический аудит</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
   <style>
-    /* ========== СТИЛИ (без изменений, как в последней версии) ========== */
+    /* ========== СТИЛИ (полностью идентичны предыдущей версии) ========== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
@@ -28,6 +28,7 @@
       body { padding: 12px; }
       .client-card { padding: 24px 18px; }
     }
+
     .client-info {
       display: flex;
       align-items: center;
@@ -36,20 +37,42 @@
       font-weight: 500;
       color: #1e3a5f;
     }
+
     .header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
       gap: 20px;
     }
+
     h1 {
       font-size: 1.7rem;
       font-weight: 600;
       letter-spacing: -0.02em;
       color: #0f172a;
     }
+
+    .progress-badge {
+      background: #eef2f6;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1e3a5f;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .progress-badge .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 10px;
+      background: #1d4ed8;
+    }
+
     .responsible-block {
       display: flex;
       flex-direction: column;
@@ -77,6 +100,7 @@
       margin-left: calc(1.4rem + 8px);
       margin-top: 2px;
     }
+
     .progress-horizontal {
       display: flex;
       gap: 12px;
@@ -130,6 +154,7 @@
     .completed .circle { background: #0f6e4a; border-color: #0f6e4a; color: white; }
     .active .circle   { background: #1d4ed8; border-color: #1d4ed8; color: white; }
     .pending .circle  { background: #ffffff; border-color: #9aaec5; color: #2b3f5c; }
+
     .label {
       font-weight: 600;
       font-size: 1rem;
@@ -150,6 +175,7 @@
     .completed .status { background: #e0f2e9; color: #0b5e42; }
     .active .status    { background: #e2edff; color: #1d4ed8; font-weight: 600; }
     .pending .status   { background: #f1f4f9; color: #5f6f84; }
+
     .step-description {
       font-size: 0.85rem;
       color: #2b4058;
@@ -170,7 +196,10 @@
       align-items: center;
       gap: 4px;
     }
-    .step-h:not(.active) .step-description { display: none; }
+    .step-h:not(.active) .step-description {
+      display: none;
+    }
+
     .progress-horizontal.scrollable {
       overflow-x: auto;
       padding-bottom: 12px;
@@ -179,6 +208,7 @@
     .progress-horizontal.scrollable .step-h {
       flex: 0 0 180px;
     }
+
     .progress-vertical {
       display: none;
       flex-direction: column;
@@ -229,6 +259,7 @@
       border-top: 1px dashed #cbd5e2;
     }
     .active .content { background: #f5faff; }
+
     @media (min-width: 769px) {
       .progress-horizontal { display: flex; }
       .progress-vertical { display: none; }
@@ -239,6 +270,7 @@
       .header-row { flex-direction: column; align-items: flex-start; }
       .responsible-block { align-self: flex-end; }
     }
+
     .info-hint {
       margin-top: 20px;
       color: #7f8fa3;
@@ -249,18 +281,32 @@
 </head>
 <body>
 <div class="client-card" id="clientCard">
-  <div class="client-info">💼 <span id="clientNameDisplay">ООО «ПромИнвест»</span></div>
+  <!-- Клиент слева сверху -->
+  <div class="client-info">
+    💼 <span id="clientNameDisplay">Концедалов С.И.</span>
+  </div>
+
+  <!-- Строка с заголовком и индикатором прогресса -->
   <div class="header-row">
-    <h1 id="caseNameDisplay">Кейс: защита корпоративного контроля</h1>
-    <div class="responsible-block" id="responsibleBlock">
-      <div class="responsible-row">
-        <span class="responsible-icon">🎓</span>
-        <span class="responsible-name" id="responsibleNameDisplay">Иван Петров, менеджер</span>
-      </div>
-      <div class="responsible-phone" id="responsiblePhoneDisplay">+7 (999) 123-45-67</div>
+    <h1 id="caseNameDisplay">Кейс: Стратегический аудит ситуации и выбор модели исполнения обязательств</h1>
+    <div class="progress-badge" id="progressBadge">
+      <span class="dot"></span> <span id="progressText">2 из 7 этапов</span>
     </div>
   </div>
+
+  <!-- Блок ответственного -->
+  <div class="responsible-block" id="responsibleBlock" style="margin-bottom: 30px;">
+    <div class="responsible-row">
+      <span class="responsible-icon">🎓</span>
+      <span class="responsible-name" id="responsibleNameDisplay">Иван Петров, клиентский менеджер</span>
+    </div>
+    <div class="responsible-phone" id="responsiblePhoneDisplay">+7 (999) 123-45-67</div>
+  </div>
+
+  <!-- Горизонтальный прогресс (десктоп) -->
   <div class="progress-horizontal" id="progressHorizontal"></div>
+
+  <!-- Вертикальный прогресс (мобильный) -->
   <div class="progress-vertical" id="progressVertical"></div>
   <div class="info-hint">📋 Данные обновляются автоматически</div>
 </div>
@@ -272,24 +318,83 @@
     const API_KEY = '$2a$10$04rxd6FFWKwU6F5lh7rxfepeHDiMl50NHzePfFIwq71to/inJGDgW';
     const BASE_URL = 'https://api.jsonbin.io/v3/b';
 
-    // Данные по умолчанию (если облако недоступно)
+    // ====== НОВЫЕ ДАННЫЕ ПО КЕЙСУ ======
     const defaultData = {
-      caseName: 'защита корпоративного контроля',
-      clientName: 'ООО «ПромИнвест»',
+      caseName: 'Стратегический аудит ситуации и выбор модели исполнения обязательств',
+      clientName: 'Концедалов С.И.',
       responsible: {
         name: 'Иван Петров',
-        position: 'менеджер',
+        position: 'клиентский менеджер',
         phone: '+7 (999) 123-45-67'
       },
       stages: [
-        { id: 0, title: 'Стабилизация', description: 'Юридические действия по фиксации текущих полномочий, сбор подписей.', estimatedTime: '2 дня', summary: 'Этап стабилизации завершён. Риск утраты контроля минимизирован.', nextActions: 'Передать документы в архив, уведомить контрагентов.', status: 'completed' },
-        { id: 1, title: 'Фиксация позиции', description: 'Юридическая фиксация статуса владения и управленческих полномочий. Подготовка справок.', estimatedTime: '3–5 рабочих дней', summary: 'Позиция зафиксирована, реестры обновлены.', nextActions: 'Ожидать подтверждения от регистратора.', status: 'active' },
-        { id: 2, title: 'Подготовка защиты', description: 'Разработка стратегии защиты, консультации с советом.', estimatedTime: '5–7 дней', summary: 'Стратегия утверждена, контрагенты предупреждены.', nextActions: 'Собрать доверенности, провести переговоры с юристами.', status: 'pending' },
-        { id: 3, title: 'Контур эскалации', description: 'Подготовка иска и досудебных претензий.', estimatedTime: '10 дней', summary: 'Иск подан, обеспечены меры.', nextActions: 'Мониторинг судебных заседаний, взаимодействие с приставами.', status: 'pending' }
+        {
+          id: 0,
+          title: 'Брифинг и анализ задачи',
+          description: 'Клиентский менеджер уточняет основные моменты задачи и ожидания по результату.',
+          estimatedTime: '1 день',
+          summary: 'Проведён первичный бриф, зафиксированы цели.',
+          nextActions: 'Ожидайте коммерческое предложение.',
+          status: 'completed'
+        },
+        {
+          id: 1,
+          title: 'Подготовка коммерческого предложения',
+          description: 'Менеджер готовит КП на основе брифа, берёт тайм-аут.',
+          estimatedTime: '2 дня',
+          summary: 'КП подготовлено и направлено клиенту.',
+          nextActions: 'Рассмотрите предложение и дайте обратную связь.',
+          status: 'completed'
+        },
+        {
+          id: 2,
+          title: 'Согласование и оплата',
+          description: 'Подписание соглашения, фиксация договорённостей, внесение установочного платежа или ретейнера.',
+          estimatedTime: '3 дня',
+          summary: 'Договор подписан, оплата поступила.',
+          nextActions: 'После оплаты передайте документы и информацию.',
+          status: 'active'  // текущий этап
+        },
+        {
+          id: 3,
+          title: 'Передача информации',
+          description: 'Клиент предоставляет необходимые документы, даёт пояснения.',
+          estimatedTime: '2 дня',
+          summary: 'Все материалы получены.',
+          nextActions: '👉 Передайте документы и пояснения эксперту.',
+          status: 'pending'
+        },
+        {
+          id: 4,
+          title: 'Экспертный анализ',
+          description: 'Эксперт изучает материалы, при необходимости задаёт уточняющие вопросы.',
+          estimatedTime: '5–7 дней',
+          summary: 'Анализ завершён, подготовлены выводы.',
+          nextActions: 'Эксперт свяжется для уточнений.',
+          status: 'pending'
+        },
+        {
+          id: 5,
+          title: 'Презентация результатов',
+          description: 'Эксперт представляет итоги анализа, модели поведения, рекомендованный вариант, передаёт письменный отчёт.',
+          estimatedTime: '1 день',
+          summary: 'Презентация проведена, отчёт передан.',
+          nextActions: 'Ознакомьтесь с результатами, подготовьте вопросы.',
+          status: 'pending'
+        },
+        {
+          id: 6,
+          title: 'Обратная связь',
+          description: 'Клиентский менеджер уточняет удовлетворённость работой эксперта и готовность к реализации.',
+          estimatedTime: '1 день',
+          summary: 'Обратная связь получена, определены следующие шаги.',
+          nextActions: 'Сообщите ваши впечатления и планы.',
+          status: 'pending'
+        }
       ]
     };
 
-    // Загрузка данных из облака
+    // Загрузка данных из облака (если доступно, иначе defaultData)
     async function loadData() {
       try {
         const response = await fetch(`${BASE_URL}/${BIN_ID}/latest`, {
@@ -310,11 +415,35 @@
       return 'Ожидает';
     }
 
-    // Функция отрисовки (принимает данные)
+    // Функция для форматирования текста описания с иконкой в зависимости от статуса
+    function getDescriptionWithIcon(stage) {
+      if (stage.status === 'active') {
+        return { icon: '⏳', text: stage.description || '', class: 'active-desc' };
+      } else if (stage.status === 'pending') {
+        return { icon: '👉', text: stage.nextActions || '', class: 'pending-desc' };
+      } else {
+        return { icon: '✅', text: stage.summary || '', class: 'completed-desc' };
+      }
+    }
+
+    // Функция отрисовки
     function render(data) {
       // Клиент
       document.getElementById('clientNameDisplay').innerText = data.clientName;
       document.getElementById('caseNameDisplay').innerText = 'Кейс: ' + data.caseName;
+
+      // Прогресс: сколько завершено и общее количество
+      const total = data.stages.length;
+      const completedCount = data.stages.filter(s => s.status === 'completed').length;
+      const activeStage = data.stages.find(s => s.status === 'active');
+      let progressText = '';
+      if (activeStage) {
+        const activeIndex = data.stages.findIndex(s => s.status === 'active') + 1;
+        progressText = `⏳ Этап ${activeIndex} из ${total}: ${activeStage.title}`;
+      } else {
+        progressText = `${completedCount} из ${total} этапов завершено`;
+      }
+      document.getElementById('progressText').innerText = progressText;
 
       // Ответственный
       const resp = data.responsible || { name: '', position: '', phone: '' };
@@ -341,7 +470,7 @@
         phoneEl.style.display = 'none';
       }
 
-      // Горизонтальный прогресс
+      // --- Горизонтальный прогресс ---
       const horizContainer = document.getElementById('progressHorizontal');
       horizContainer.innerHTML = '';
       data.stages.forEach(stage => {
@@ -355,11 +484,13 @@
           <div class="status">${getStatusText(stage.status)}</div>
         `;
 
+        // Для активного этапа добавляем описание с иконкой
         if (stage.status === 'active') {
+          const desc = getDescriptionWithIcon(stage);
           let etaHtml = stage.estimatedTime ? `<div class="eta">⏱️ ${stage.estimatedTime}</div>` : '';
           inner += `
             <div class="step-description">
-              <div>${stage.description || ''}</div>
+              <div><span style="font-weight: 600;">${desc.icon}</span> ${desc.text}</div>
               ${etaHtml}
             </div>
           `;
@@ -375,14 +506,15 @@
         horizContainer.classList.remove('scrollable');
       }
 
-      // Вертикальный прогресс
+      // --- Вертикальный прогресс ---
       const vertContainer = document.getElementById('progressVertical');
       vertContainer.innerHTML = '';
       data.stages.forEach(stage => {
-        let detailsText = '';
-        if (stage.status === 'active') detailsText = stage.description;
-        else if (stage.status === 'completed') detailsText = stage.summary;
-        else detailsText = stage.nextActions;
+        const desc = getDescriptionWithIcon(stage);
+        let detailsText = desc.icon + ' ' + desc.text;
+        if (stage.status === 'active' && stage.estimatedTime) {
+          detailsText += `\n⏱️ ${stage.estimatedTime}`;
+        }
 
         const stepDiv = document.createElement('div');
         stepDiv.className = `step-v ${stage.status}`;
@@ -391,7 +523,7 @@
           <div class="circle">${stage.id + 1}</div>
           <div class="content">
             <div class="label">${stage.title} <span class="status">${getStatusText(stage.status)}</span></div>
-            <div class="details-text">${detailsText || '—'}</div>
+            <div class="details-text">${detailsText.replace(/\n/g, '<br>')}</div>
           </div>
         `;
         vertContainer.appendChild(stepDiv);
@@ -404,10 +536,10 @@
       render(data);
     }
 
-    // Запуск
+    // Первый запуск
     fetchAndRender();
-    // Обновление каждые 5 секунд
-    setInterval(fetchAndRender, 300000);
+    // Обновление каждые 5 минут
+    setInterval(fetchAndRender, 300000); // 300000 мс = 5 минут
   })();
 </script>
 </body>
