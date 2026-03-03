@@ -37,7 +37,6 @@
       color: #1e3a5f;
     }
 
-    /* Заголовок кейса: две строки */
     .case-header {
       margin-bottom: 20px;
     }
@@ -55,7 +54,6 @@
       line-height: 1.3;
     }
 
-    /* Таймбар */
     .timeline-container {
       margin-bottom: 20px;
       background: #f1f4f9;
@@ -105,17 +103,49 @@
       margin-left: 4px;
     }
     .responsible-details {
-      margin-top: 8px;
-      padding-left: calc(1.4rem + 8px);
-      font-size: 0.95rem;
-      color: #0f2b45;
+      margin-top: 12px;
       display: none;
+      align-items: center;
+      gap: 16px;
+      background: #f8fafd;
+      padding: 16px;
+      border-radius: 24px;
+      border: 1px solid #eef3f9;
     }
     .responsible-details.expanded {
-      display: block;
+      display: flex;
     }
-    .responsible-details .phone {
-      color: #2563eb;
+    .responsible-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 64px;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .responsible-info {
+      flex: 1;
+    }
+    .responsible-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .responsible-contacts {
+      display: flex;
+      gap: 16px;
+    }
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: #1e3a5f;
+      font-size: 0.9rem;
+    }
+    .contact-link img {
+      width: 20px;
+      height: 20px;
     }
 
     /* горизонтальный прогресс */
@@ -127,16 +157,19 @@
       padding: 8px 0;
       width: 100%;
     }
+    /* линия теперь рисуется через псевдоэлемент, прикреплённый к родителю */
     .progress-horizontal::before {
       content: '';
       position: absolute;
       top: 38px;
-      left: 40px;
-      right: 40px;
+      left: 0;
+      right: 0;
       height: 3px;
       background: linear-gradient(90deg, #d0dbea, #a6b8cf);
       border-radius: 6px;
       z-index: 0;
+      margin-left: 40px;
+      margin-right: 40px;
     }
     .step-h {
       position: relative;
@@ -175,35 +208,37 @@
       font-weight: 600;
       font-size: 1.3rem;
       color: #405571;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       box-shadow: 0 6px 12px -6px rgba(0,32,64,0.08);
     }
     .completed .circle { background: #0f6e4a; border-color: #0f6e4a; color: white; }
     .active .circle   { background: #1d4ed8; border-color: #1d4ed8; color: white; }
     .pending .circle  { background: #ffffff; border-color: #9aaec5; color: #2b3f5c; }
 
-    .label {
+    /* статус этапа под кружком */
+    .status-badge {
+      font-size: 0.75rem;
       font-weight: 600;
-      font-size: 1rem;
-      margin-bottom: 4px;
-      color: #1f2a41;
-      padding: 0 4px;
-    }
-    .status {
-      font-size: 0.8rem;
-      font-weight: 500;
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 30px;
       background: #f1f4f9;
       color: #43566e;
       display: inline-block;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
     }
-    .completed .status { background: #e0f2e9; color: #0b5e42; }
-    .active .status    { background: #e2edff; color: #1d4ed8; font-weight: 600; }
-    .pending .status   { background: #f1f4f9; color: #5f6f84; }
+    .completed .status-badge { background: #e0f2e9; color: #0b5e42; }
+    .active .status-badge    { background: #e2edff; color: #1d4ed8; }
+    .pending .status-badge   { background: #f1f4f9; color: #5f6f84; }
 
-    /* описание этапа (скрыто у неактивных) */
+    .label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #1f2a41;
+      padding: 0 4px;
+    }
+
+    /* описание этапа */
     .step-description {
       font-size: 0.85rem;
       color: #2b4058;
@@ -225,7 +260,7 @@
       margin-top: 6px;
     }
 
-    /* горизонтальный скролл при большом количестве этапов */
+    /* горизонтальный скролл */
     .progress-horizontal.scrollable {
       overflow-x: auto;
       padding-bottom: 12px;
@@ -276,6 +311,12 @@
       padding: 18px 18px 18px 24px;
       box-shadow: 0 6px 18px -10px #14243330, 0 0 0 1px #eef4fa inset;
     }
+    .step-v .status-badge {
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
     .step-v .label {
       font-size: 1.15rem;
       display: flex;
@@ -314,26 +355,18 @@
 </head>
 <body>
 <div class="client-card" id="clientCard">
-  <!-- Клиент слева сверху -->
-  <div class="client-info">
-    💼 <span id="clientNameDisplay">Концедалов С.И.</span>
-  </div>
+  <div class="client-info">💼 <span id="clientNameDisplay">Концедалов С.И.</span></div>
 
-  <!-- Заголовок кейса (две строки) -->
   <div class="case-header">
     <span class="case-label">Кейс</span>
     <span class="case-title" id="caseNameDisplay">Стратегический аудит ситуации и выбор модели исполнения обязательств</span>
   </div>
 
-  <!-- Таймбар всего кейса -->
-  <div class="timeline-container" id="timelineContainer" style="display: none;">
-    <div class="timeline-bar">
-      <div class="timeline-progress" id="timelineProgress"></div>
-    </div>
+  <div class="timeline-container" id="timelineContainer">
+    <div class="timeline-bar"><div class="timeline-progress" id="timelineProgress"></div></div>
     <span class="timeline-percent" id="timelinePercent">0%</span>
   </div>
 
-  <!-- Ответственный -->
   <div class="responsible-block" id="responsibleBlock">
     <div class="responsible-header">
       <span class="responsible-icon">🎓</span>
@@ -341,15 +374,15 @@
       <span class="hint">🔽</span>
     </div>
     <div class="responsible-details" id="responsibleDetails">
-      <span id="responsibleNameDisplay">Иван Петров, клиентский менеджер</span><br>
-      <span class="phone" id="responsiblePhoneDisplay">+7 (999) 123-45-67</span>
+      <img class="responsible-avatar" id="responsibleAvatar" src="" alt="">
+      <div class="responsible-info">
+        <div class="responsible-name" id="responsibleNameDisplay"></div>
+        <div class="responsible-contacts" id="responsibleContacts"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Горизонтальный прогресс -->
   <div class="progress-horizontal" id="progressHorizontal"></div>
-
-  <!-- Вертикальный прогресс -->
   <div class="progress-vertical" id="progressVertical"></div>
   <div class="info-hint">📋 Данные обновляются автоматически</div>
 </div>
@@ -360,11 +393,15 @@
     const API_KEY = '$2a$10$04rxd6FFWKwU6F5lh7rxfepeHDiMl50NHzePfFIwq71to/inJGDgW';
     const BASE_URL = 'https://api.jsonbin.io/v3/b';
 
-    // Данные по умолчанию (синхронизированы с админкой)
     const defaultData = {
       caseName: 'Стратегический аудит ситуации и выбор модели исполнения обязательств',
       clientName: 'Концедалов С.И.',
-      responsible: { name: 'Иван Петров', position: 'клиентский менеджер', phone: '+7 (999) 123-45-67' },
+      responsible: {
+        name: 'Иван Петров',
+        avatar: 'https://i.pravatar.cc/150?u=ivan',
+        telegram: '@ivanov',
+        whatsapp: '+79991234567'
+      },
       stages: [
         { id: 0, title: 'Брифинг и анализ задачи', description: 'Клиентский менеджер уточняет основные моменты задачи и ожидания по результату.', summary: 'Проведён первичный бриф, зафиксированы цели.', nextActions: 'Ожидайте коммерческое предложение.', status: 'completed', startDate: '2026-03-01', endDate: '2026-03-02' },
         { id: 1, title: 'Подготовка коммерческого предложения', description: 'Менеджер готовит КП на основе брифа, берёт тайм-аут.', summary: 'КП подготовлено и направлено клиенту.', nextActions: 'Рассмотрите предложение и дайте обратную связь.', status: 'completed', startDate: '2026-03-03', endDate: '2026-03-05' },
@@ -390,7 +427,7 @@
       }
     }
 
-    // Функции подсчёта дней (рабочие)
+    // Рабочие дни
     function countWorkingDays(start, end) {
       if (!start || !end) return null;
       const startDate = new Date(start + 'T00:00:00');
@@ -422,7 +459,6 @@
       return count;
     }
 
-    // Для таймбара используем календарные дни (проще для восприятия)
     function getOverallProgress(stages) {
       const dates = stages.reduce((acc, s) => {
         if (s.startDate) acc.push(new Date(s.startDate));
@@ -446,15 +482,10 @@
       return 'Предстоит';
     }
 
-    // Формирование описания без иконок
     function getDescriptionText(stage) {
-      if (stage.status === 'active') {
-        return stage.description || '';
-      } else if (stage.status === 'pending') {
-        return stage.description || '';
-      } else {
-        return stage.summary || '';
-      }
+      if (stage.status === 'active') return stage.description || '';
+      if (stage.status === 'pending') return stage.description || '';
+      return stage.summary || '';
     }
 
     let expandedStageId = null;
@@ -463,32 +494,39 @@
       document.getElementById('clientNameDisplay').innerText = data.clientName;
       document.getElementById('caseNameDisplay').innerText = data.caseName;
 
-      // Таймбар
       const overall = getOverallProgress(data.stages);
-      const timelineContainer = document.getElementById('timelineContainer');
       if (overall !== null) {
-        timelineContainer.style.display = 'flex';
+        document.getElementById('timelineContainer').style.display = 'flex';
         document.getElementById('timelineProgress').style.width = overall + '%';
         document.getElementById('timelinePercent').innerText = overall + '%';
       } else {
-        timelineContainer.style.display = 'none';
+        document.getElementById('timelineContainer').style.display = 'none';
       }
 
-      // Прогресс (текстовый) – оставим для справки, но можем убрать, если не нужен
-      const total = data.stages.length;
-      const completedCount = data.stages.filter(s => s.status === 'completed').length;
-      const activeStage = data.stages.find(s => s.status === 'active');
-      // Можно не выводить, но оставим как альтернативу (в html не используется)
-
-      // Ответственный
       const resp = data.responsible || {};
-      const namePart = resp.name || '';
-      const positionPart = resp.position ? `, ${resp.position}` : '';
-      document.getElementById('responsibleNameDisplay').innerHTML = namePart + positionPart;
-      document.getElementById('responsiblePhoneDisplay').innerText = resp.phone || '';
+      document.getElementById('responsibleNameDisplay').innerText = resp.name || '';
+      document.getElementById('responsibleAvatar').src = resp.avatar || '';
+      const contactsDiv = document.getElementById('responsibleContacts');
+      contactsDiv.innerHTML = '';
+      if (resp.telegram) {
+        const a = document.createElement('a');
+        a.href = resp.telegram.startsWith('http') ? resp.telegram : `https://t.me/${resp.telegram.replace('@','')}`;
+        a.target = '_blank';
+        a.className = 'contact-link';
+        a.innerHTML = '<img src="https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/telegram.svg" alt="Telegram" style="width:20px;height:20px;"> Telegram';
+        contactsDiv.appendChild(a);
+      }
+      if (resp.whatsapp) {
+        const a = document.createElement('a');
+        a.href = resp.whatsapp.startsWith('http') ? resp.whatsapp : `https://wa.me/${resp.whatsapp.replace(/\D/g,'')}`;
+        a.target = '_blank';
+        a.className = 'contact-link';
+        a.innerHTML = '<img src="https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/whatsapp.svg" alt="WhatsApp" style="width:20px;height:20px;"> WhatsApp';
+        contactsDiv.appendChild(a);
+      }
       document.getElementById('responsibleDetails').classList.remove('expanded');
 
-      // Горизонтальный прогресс
+      // Горизонтальный
       const horizContainer = document.getElementById('progressHorizontal');
       horizContainer.innerHTML = '';
 
@@ -505,8 +543,6 @@
 
         const descText = getDescriptionText(stage);
         let extraHtml = '';
-
-        // Для активного этапа добавляем "в работе X из Y дней"
         if (stage.status === 'active' && stage.startDate && stage.endDate) {
           const totalDays = countWorkingDays(stage.startDate, stage.endDate);
           const elapsed = elapsedWorkingDays(stage.startDate);
@@ -514,28 +550,25 @@
             extraHtml = `<div class="work-days-info">⏱️ в работе ${elapsed} из ${totalDays} дней</div>`;
           }
         }
-
-        // Для активного этапа добавляем ожидания от клиента
         let expectationsHtml = '';
         if (stage.status === 'active' && stage.nextActions) {
-          expectationsHtml = `<div style="margin-top: 8px; background: #eef6ff; padding: 8px; border-radius: 12px;"><strong>Ожидания от клиента:</strong> ${stage.nextActions}</div>`;
+          expectationsHtml = `<div style="margin-top:8px; background:#eef6ff; padding:8px; border-radius:12px;"><strong>Ожидания от клиента:</strong> ${stage.nextActions}</div>`;
         }
 
         stepDiv.innerHTML = `
           <div class="circle">${stage.id + 1}</div>
+          <div class="status-badge">${getStatusText(stage.status)}</div>
           <div class="label">${stage.title}</div>
-          <div class="status">${getStatusText(stage.status)}</div>
           <div class="hint-icon">🔽</div>
           ${descText ? `<div class="step-description">${descText.replace(/\n/g, '<br>')}${extraHtml}${expectationsHtml}</div>` : ''}
         `;
-
         horizContainer.appendChild(stepDiv);
       });
 
       if (data.stages.length >= 6) horizContainer.classList.add('scrollable');
       else horizContainer.classList.remove('scrollable');
 
-      // Вертикальный прогресс
+      // Вертикальный
       const vertContainer = document.getElementById('progressVertical');
       vertContainer.innerHTML = '';
       data.stages.forEach(stage => {
@@ -544,7 +577,7 @@
           const totalDays = countWorkingDays(stage.startDate, stage.endDate);
           const elapsed = elapsedWorkingDays(stage.startDate);
           if (totalDays !== null && elapsed !== null) {
-            detailsText += `\n⏱️ в работе ${elapsed} из ${totalDays} дней`;
+            detailsText += `\n\n⏱️ в работе ${elapsed} из ${totalDays} дней`;
           }
           if (stage.nextActions) {
             detailsText += `\n\nОжидания от клиента: ${stage.nextActions}`;
@@ -558,7 +591,8 @@
         stepDiv.innerHTML = `
           <div class="circle">${stage.id + 1}</div>
           <div class="content">
-            <div class="label">${stage.title} <span class="status">${getStatusText(stage.status)}</span></div>
+            <div class="status-badge">${getStatusText(stage.status)}</div>
+            <div class="label">${stage.title}</div>
             <div class="details-text">${detailsText.replace(/\n/g, '<br>')}</div>
             <div style="font-size:0.8rem; color:#8a9bb5; margin-top:4px;">🔽</div>
           </div>
@@ -567,14 +601,12 @@
       });
     }
 
-    // Обработчики кликов
     function handleStageClick(e) {
       const step = e.target.closest('.step-h, .step-v');
       if (!step) return;
       const stepId = step.dataset.step;
       if (stepId === undefined) return;
-      const id = parseInt(stepId);
-      expandedStageId = id;
+      expandedStageId = parseInt(stepId);
       fetchAndRender();
     }
 
