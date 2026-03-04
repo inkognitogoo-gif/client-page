@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* ========== СТИЛИ (обновлены) ========== */
     :root {
       --primary: #1BA1FA;
       --primary-dark: #0B7FD4;
@@ -36,7 +37,6 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Manrope', system-ui, sans-serif;
       background: var(--bg);
@@ -89,11 +89,6 @@
 
     .case-sticky-header.is-sticky { position: sticky; top: 0; }
     .case-sticky-header.stuck { padding: 16px 32px; box-shadow: 0 4px 20px -4px rgba(0,20,50,0.1); border-bottom: 1px solid var(--border-light); }
-    .case-sticky-header.stuck .client-tag { margin-bottom: 8px; }
-    .case-sticky-header.stuck .case-title { font-size: 1.2rem; }
-    .case-sticky-header.stuck .progress-overview { margin: 12px 0 0; }
-    .case-sticky-header.stuck .progress-track { margin: 10px 0 0; }
-    .case-sticky-header.stuck .coordinator-dropdown.visible { display: none; }
 
     .client-tag {
       display: inline-flex;
@@ -109,21 +104,21 @@
       letter-spacing: 0.01em;
     }
 
+    .case-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
     .header-top-row {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 12px;
       flex-wrap: wrap;
-    }
-
-    .case-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 2px;
     }
 
     .case-title {
@@ -265,24 +260,36 @@
 
     .stages-section { padding: 28px 32px 32px; }
 
-    /* Desktop horizontal */
+    /* Desktop horizontal - без линий */
     .stages-horizontal {
       display: flex;
       gap: 10px;
-      position: relative;
     }
 
     .stage-card-h {
       flex: 1; min-width: 0;
       border-radius: var(--radius-md);
       padding: 20px 16px 16px;
-      background: var(--bg); /* серый фон по умолчанию */
+      cursor: pointer;
+      transition: all 0.25s ease;
       border: 2px solid transparent;
+      background: var(--bg); /* серый фон для всех */
+      display: flex;
+      flex-direction: column;
     }
 
-    .stage-card-h.completed { background: var(--bg); } /* завершён тоже серый, но номер и статус зелёные */
-    .stage-card-h.active { background: var(--primary-light); border-color: var(--primary); box-shadow: var(--shadow-glow); }
-    .stage-card-h.pending { background: var(--bg); opacity: 1; } /* явно серый */
+    .stage-card-h:hover {
+      border-color: var(--border);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stage-card-h.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-2px);
+    }
 
     .stage-number {
       width: 36px; height: 36px;
@@ -316,6 +323,7 @@
       padding: 3px 10px;
       border-radius: 100px;
       margin-bottom: 8px;
+      align-self: flex-start;
     }
 
     .completed .stage-status-badge { background: rgba(16,185,129,0.15); color: var(--green-dark); }
@@ -329,7 +337,8 @@
       font-size: 0.83rem;
       color: var(--text-secondary);
       line-height: 1.5;
-      display: block; /* всегда раскрыт */
+      display: block; /* всегда видно */
+      flex-grow: 1;
     }
 
     .detail-eta {
@@ -356,6 +365,21 @@
       font-size: 0.72rem; text-transform: uppercase;
       letter-spacing: 0.04em; margin-bottom: 3px;
     }
+
+    .materials-link {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--primary-light);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--primary-dark);
+      text-decoration: none;
+      border: 1px solid var(--primary);
+    }
+    .materials-link:hover { background: var(--primary); color: white; }
 
     /* Vertical stages */
     .stages-vertical {
@@ -384,15 +408,21 @@
     }
 
     .stage-v-body {
-      background: var(--bg);
+      background: var(--bg); /* серый фон для всех */
       border-radius: var(--radius-md);
       padding: 18px 20px;
       border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s;
     }
 
-    .stage-v.completed .stage-v-body { background: var(--bg); }
-    .stage-v.active .stage-v-body { background: var(--primary-light); border-color: var(--primary); box-shadow: var(--shadow-glow); }
-    .stage-v.pending .stage-v-body { background: var(--bg); }
+    .stage-v.active .stage-v-body {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .stage-v.pending .stage-v-body { background: var(--bg); } /* уже серый */
 
     .stage-v-header {
       display: flex;
@@ -408,7 +438,7 @@
       margin-top: 12px; padding-top: 12px;
       border-top: 1px dashed rgba(0,0,0,0.08);
       font-size: 0.88rem; color: var(--text-secondary);
-      line-height: 1.55; display: block; /* всегда раскрыт */
+      line-height: 1.55; display: block; /* всегда видно */
     }
 
     .case-footer {
@@ -494,7 +524,6 @@
 
     @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
     @keyframes fadeDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes slideDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
     @keyframes stageEnter { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
@@ -522,18 +551,16 @@
 
 <div class="case-card" id="caseCard">
 
-  <!-- Sticky header -->
   <div class="case-sticky-header" id="stickyHeader">
     <div class="client-tag">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
       <span id="clientNameDisplay">—</span>
     </div>
 
+    <div class="case-label">КЕЙС</div>
+
     <div class="header-top-row">
-      <div>
-        <div class="case-label">КЕЙС</div>
-        <h1 class="case-title" id="caseTitleDisplay">—</h1>
-      </div>
+      <h1 class="case-title" id="caseTitleDisplay">—</h1>
 
       <div class="coordinator-toggle" id="coordToggle" style="display:none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -547,7 +574,7 @@
         <div class="coordinator-avatar" id="coordAvatar">—</div>
         <div class="coordinator-info">
           <div class="coordinator-name" id="coordName">—</div>
-          <div class="coordinator-role" id="coordRole">—</div>
+          <div class="coordinator-role" id="coordRole"></div>
         </div>
       </div>
       <div class="coordinator-contacts" id="coordContacts"></div>
@@ -583,29 +610,40 @@
   const API_KEY = '$2a$10$04rxd6FFWKwU6F5lh7rxfepeHDiMl50NHzePfFIwq71to/inJGDgW';
   const BASE_URL = 'https://api.jsonbin.io/v3/b';
 
+  // Проверка на предпросмотр
+  let previewData = null;
+  if (window.location.search.includes('preview')) {
+    const stored = localStorage.getItem('previewData');
+    if (stored) {
+      try { previewData = JSON.parse(stored); } catch(e) {}
+    }
+  }
+
   const defaultData = {
     caseName: 'Стратегический аудит ситуации и выбор модели исполнения обязательств',
     clientName: 'Концедалов С.И.',
-    responsible: {
+    expert: {
       name: 'Иван Петров',
-      position: 'клиентский менеджер',
+      avatar: '',
       phone: '+7 (999) 123-45-67',
-      avatar: ''
+      telegram: 'ivan_petrov',
+      whatsapp: '79991234567'
     },
     stages: [
-      { id:0, title:'Брифинг и анализ задачи', description:'Клиентский менеджер уточняет основные моменты задачи и ожидания по результату.', summary:'Проведён первичный бриф, зафиксированы цели.', nextActions:'Ожидайте коммерческое предложение.', status:'completed', startDate:'2026-03-01', endDate:'2026-03-02' },
-      { id:1, title:'Подготовка коммерческого предложения', description:'Менеджер готовит КП на основе брифа, берёт тайм-аут.', summary:'КП подготовлено и направлено клиенту.', nextActions:'Рассмотрите предложение и дайте обратную связь.', status:'completed', startDate:'2026-03-03', endDate:'2026-03-05' },
-      { id:2, title:'Согласование и оплата', description:'Подписание соглашения, фиксация договорённостей, внесение установочного платежа или ретейнера.', summary:'Договор подписан, оплата поступила.', nextActions:'После оплаты передайте документы и информацию.', status:'active', startDate:'2026-03-06', endDate:'2026-03-09' },
-      { id:3, title:'Передача информации', description:'Клиент предоставляет необходимые документы, даёт пояснения.', summary:'Все материалы получены.', nextActions:'Передайте документы и пояснения эксперту.', status:'pending', startDate:'2026-03-10', endDate:'2026-03-12' },
-      { id:4, title:'Экспертный анализ', description:'Эксперт изучает материалы, при необходимости задаёт уточняющие вопросы.', summary:'Анализ завершён, подготовлены выводы.', nextActions:'Эксперт свяжется для уточнений.', status:'pending', startDate:'2026-03-13', endDate:'2026-03-20' },
-      { id:5, title:'Презентация результатов', description:'Эксперт представляет итоги анализа, модели поведения, рекомендованный вариант, передаёт письменный отчёт.', summary:'Презентация проведена, отчёт передан.', nextActions:'Ознакомьтесь с результатами, подготовьте вопросы.', status:'pending', startDate:'2026-03-21', endDate:'2026-03-22' },
-      { id:6, title:'Обратная связь', description:'Клиентский менеджер уточняет удовлетворённость работой эксперта и готовность к реализации.', summary:'Обратная связь получена, определены следующие шаги.', nextActions:'Сообщите ваши впечатления и планы.', status:'pending', startDate:'2026-03-23', endDate:'2026-03-24' }
+      { id:0, title:'Брифинг и анализ задачи', description:'Клиентский менеджер уточняет основные моменты задачи и ожидания по результату.', summary:'Проведён первичный бриф, зафиксированы цели.', nextActions:'Ожидайте коммерческое предложение.', status:'completed', startDate:'2026-03-01', endDate:'2026-03-02', materials:'' },
+      { id:1, title:'Подготовка коммерческого предложения', description:'Менеджер готовит КП на основе брифа, берёт тайм-аут.', summary:'КП подготовлено и направлено клиенту.', nextActions:'Рассмотрите предложение и дайте обратную связь.', status:'completed', startDate:'2026-03-03', endDate:'2026-03-05', materials:'https://example.com/kp.pdf' },
+      { id:2, title:'Согласование и оплата', description:'Подписание соглашения, фиксация договорённостей, внесение установочного платежа или ретейнера.', summary:'Договор подписан, оплата поступила.', nextActions:'После оплаты передайте документы и информацию.', status:'active', startDate:'2026-03-06', endDate:'2026-03-09', materials:'' },
+      { id:3, title:'Передача информации', description:'Клиент предоставляет необходимые документы, даёт пояснения.', summary:'Все материалы получены.', nextActions:'Передайте документы и пояснения эксперту.', status:'pending', startDate:'2026-03-10', endDate:'2026-03-12', materials:'' },
+      { id:4, title:'Экспертный анализ', description:'Эксперт изучает материалы, при необходимости задаёт уточняющие вопросы.', summary:'Анализ завершён, подготовлены выводы.', nextActions:'Эксперт свяжется для уточнений.', status:'pending', startDate:'2026-03-13', endDate:'2026-03-20', materials:'' },
+      { id:5, title:'Презентация результатов', description:'Эксперт представляет итоги анализа, модели поведения, рекомендованный вариант, передаёт письменный отчёт.', summary:'Презентация проведена, отчёт передан.', nextActions:'Ознакомьтесь с результатами, подготовьте вопросы.', status:'pending', startDate:'2026-03-21', endDate:'2026-03-22', materials:'https://example.com/presentation.pdf' },
+      { id:6, title:'Обратная связь', description:'Клиентский менеджер уточняет удовлетворённость работой эксперта и готовность к реализации.', summary:'Обратная связь получена, определены следующие шаги.', nextActions:'Сообщите ваши впечатления и планы.', status:'pending', startDate:'2026-03-23', endDate:'2026-03-24', materials:'' }
     ]
   };
 
   let lastDataHash = '';
 
   async function loadData() {
+    if (previewData) return previewData;
     try {
       const r = await fetch(`${BASE_URL}/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
       if (!r.ok) throw new Error();
@@ -620,8 +658,8 @@
   }
 
   function getInitials(n) { return n ? n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : '?'; }
-  function cleanPhone(p) { return p.replace(/[^\d+]/g, ''); }
 
+  // Функции для рабочих дней
   function countWorkingDays(start, end) {
     if (!start || !end) return null;
     const startDate = new Date(start + 'T00:00:00');
@@ -676,12 +714,10 @@
     return stage.nextActions || '—';
   }
 
-  function getWorkDaysInfo(stage) {
-    if (stage.status !== 'active' || !stage.startDate || !stage.endDate) return '';
-    const total = countWorkingDays(stage.startDate, stage.endDate);
-    const elapsed = elapsedWorkingDays(stage.startDate);
-    if (total === null || elapsed === null) return '';
-    return `<div class="detail-eta">⏱️ в работе ${elapsed} из ${total} дней</div>`;
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' }).replace('.','');
   }
 
   function updateTimestamp() {
@@ -691,10 +727,13 @@
       `Обновлено ${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()}, ${pad(now.getHours())}:${pad(now.getMinutes())}`;
   }
 
+  // SVGs
   const phoneSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>';
   const waSvg='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.111.547 4.099 1.504 5.832L0 24l6.335-1.652A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-1.903 0-3.727-.528-5.313-1.527l-.38-.228-3.758.981.999-3.648-.25-.396A9.768 9.768 0 0 1 2.182 12c0-5.423 4.395-9.818 9.818-9.818S21.818 6.577 21.818 12s-4.395 9.818-9.818 9.818z"/></svg>';
   const tgSvg='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 1 0 24 12.056A12.01 12.01 0 0 0 11.944 0Zm5.654 8.26-1.97 9.293c-.146.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.334-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.832.928Z"/></svg>';
+  const paperclipSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>';
 
+  // Coordinator toggle
   const coordToggle = document.getElementById('coordToggle');
   const coordDropdown = document.getElementById('coordDropdown');
   coordToggle.addEventListener('click', ()=>{
@@ -708,6 +747,7 @@
     }
   });
 
+  // Sticky header
   let stickyObserver = null;
   function initSticky(count) {
     const header = document.getElementById('stickyHeader');
@@ -736,35 +776,39 @@
     document.getElementById('clientNameDisplay').textContent = data.clientName || '—';
     document.getElementById('caseTitleDisplay').textContent = data.caseName || '—';
 
-    const resp = data.responsible || {};
-    if (resp.name) {
+    // Эксперт (бывший ответственный)
+    const exp = data.expert || {};
+    if (exp.name) {
       coordToggle.style.display = '';
       const av = document.getElementById('coordAvatar');
-      av.innerHTML = resp.avatar ? `<img src="${resp.avatar}" alt="${resp.name}">` : '';
-      if (!resp.avatar) av.textContent = getInitials(resp.name);
-      document.getElementById('coordName').textContent = resp.name;
-      document.getElementById('coordRole').textContent = resp.position || '';
+      av.innerHTML = exp.avatar ? `<img src="${exp.avatar}" alt="${exp.name}">` : '';
+      if (!exp.avatar) av.textContent = getInitials(exp.name);
+      document.getElementById('coordName').textContent = exp.name;
+      document.getElementById('coordRole').textContent = ''; // должности больше нет
 
       const c = document.getElementById('coordContacts');
       c.innerHTML = '';
-      if (resp.phone) {
-        const cl = cleanPhone(resp.phone);
-        // добавляем кнопки только если есть телефон
+      // Добавляем кнопки только если есть соответствующие данные
+      if (exp.phone) {
+        const cl = exp.phone.replace(/[^\d+]/g, '');
         c.innerHTML += `<a class="contact-btn" href="tel:${cl}">${phoneSvg}<span>Позвонить</span></a>`;
         c.innerHTML += `<a class="contact-icon-btn" href="tel:${cl}" title="Позвонить">${phoneSvg}</a>`;
-
-        // WhatsApp ссылка формируется из телефона (можно отключить, если не нужно)
-        c.innerHTML += `<a class="contact-btn" href="https://wa.me/${cl.replace('+','')}" target="_blank" rel="noopener">${waSvg}<span>WhatsApp</span></a>`;
-        c.innerHTML += `<a class="contact-icon-btn" href="https://wa.me/${cl.replace('+','')}" target="_blank" rel="noopener" title="WhatsApp">${waSvg}</a>`;
-
-        // Telegram ссылка формируется из телефона (можно отключить, если не нужно)
-        c.innerHTML += `<a class="contact-btn" href="https://t.me/${cl.replace('+','')}" target="_blank" rel="noopener">${tgSvg}<span>Telegram</span></a>`;
-        c.innerHTML += `<a class="contact-icon-btn" href="https://t.me/${cl.replace('+','')}" target="_blank" rel="noopener" title="Telegram">${tgSvg}</a>`;
+      }
+      if (exp.telegram) {
+        const tg = exp.telegram.replace('@','');
+        c.innerHTML += `<a class="contact-btn" href="https://t.me/${tg}" target="_blank">${tgSvg}<span>Telegram</span></a>`;
+        c.innerHTML += `<a class="contact-icon-btn" href="https://t.me/${tg}" target="_blank" title="Telegram">${tgSvg}</a>`;
+      }
+      if (exp.whatsapp) {
+        const wa = exp.whatsapp.replace(/[^\d]/g, '');
+        c.innerHTML += `<a class="contact-btn" href="https://wa.me/${wa}" target="_blank">${waSvg}<span>WhatsApp</span></a>`;
+        c.innerHTML += `<a class="contact-icon-btn" href="https://wa.me/${wa}" target="_blank" title="WhatsApp">${waSvg}</a>`;
       }
     } else {
       coordToggle.style.display = 'none';
     }
 
+    // Progress
     const stages = data.stages || [];
     const total = stages.length;
     const completedCount = stages.filter(s => s.status === 'completed').length;
@@ -783,20 +827,44 @@
       card.className = `stage-card-h ${s.status} stage-animate`;
       card.style.animationDelay = `${i*0.08}s`;
 
-      let det = `<div class="stage-details-h"><div>${getDetailText(s)}</div>`;
+      let details = `<div class="stage-details-h">`;
+
+      // Для завершенных: добавляем иконку 📎 перед описанием и ⏱️ с датой окончания
+      if (s.status === 'completed') {
+        details += `<div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px;">${paperclipSvg} <span>${getDetailText(s)}</span></div>`;
+        if (s.endDate) {
+          details += `<div class="detail-eta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> окончено ${formatDate(s.endDate)}</div>`;
+        }
+      } else {
+        details += `<div>${getDetailText(s)}</div>`;
+      }
+
+      // Для активного: строка с днями
       if (s.status === 'active') {
-        det += getWorkDaysInfo(s);
+        const totalDays = countWorkingDays(s.startDate, s.endDate);
+        const elapsed = elapsedWorkingDays(s.startDate);
+        if (totalDays !== null && elapsed !== null) {
+          details += `<div class="detail-eta">⏱️ в работе ${elapsed} из ${totalDays} дней</div>`;
+        }
+        // Ожидания от клиента
+        if (s.nextActions) {
+          details += `<div class="manager-comment"><div class="manager-comment-label">Ожидания от клиента</div>${s.nextActions}</div>`;
+        }
       }
-      if (s.status === 'active' && s.nextActions) {
-        det += `<div class="manager-comment"><div class="manager-comment-label">Ожидания от клиента</div>${s.nextActions}</div>`;
+
+      // Материалы
+      if (s.materials) {
+        details += `<a href="${s.materials}" target="_blank" class="materials-link">📎 материалы</a>`;
       }
-      det += '</div>';
+
+      details += '</div>';
 
       card.innerHTML = `
         <div class="stage-number">${i+1}</div>
         <div class="stage-status-badge">${statusText(s.status)}</div>
         <div class="stage-title-h">${s.title}</div>
-        ${det}`;
+        ${details}
+      `;
 
       hC.appendChild(card);
     });
@@ -811,14 +879,33 @@
       el.className = `stage-v ${s.status} stage-animate`;
       el.style.animationDelay = `${i*0.08}s`;
 
-      let det = `<div class="stage-v-details"><div>${getDetailText(s)}</div>`;
+      let details = `<div class="stage-v-details">`;
+
+      if (s.status === 'completed') {
+        details += `<div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px;">${paperclipSvg} <span>${getDetailText(s)}</span></div>`;
+        if (s.endDate) {
+          details += `<div class="detail-eta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> окончено ${formatDate(s.endDate)}</div>`;
+        }
+      } else {
+        details += `<div>${getDetailText(s)}</div>`;
+      }
+
       if (s.status === 'active') {
-        det += getWorkDaysInfo(s);
+        const totalDays = countWorkingDays(s.startDate, s.endDate);
+        const elapsed = elapsedWorkingDays(s.startDate);
+        if (totalDays !== null && elapsed !== null) {
+          details += `<div class="detail-eta">⏱️ в работе ${elapsed} из ${totalDays} дней</div>`;
+        }
+        if (s.nextActions) {
+          details += `<div class="manager-comment"><div class="manager-comment-label">Ожидания от клиента</div>${s.nextActions}</div>`;
+        }
       }
-      if (s.status === 'active' && s.nextActions) {
-        det += `<div class="manager-comment"><div class="manager-comment-label">Ожидания от клиента</div>${s.nextActions}</div>`;
+
+      if (s.materials) {
+        details += `<a href="${s.materials}" target="_blank" class="materials-link">📎 материалы</a>`;
       }
-      det += '</div>';
+
+      details += '</div>';
 
       el.innerHTML = `
         <div class="stage-number">${i+1}</div>
@@ -827,7 +914,7 @@
             <div class="stage-status-badge">${statusText(s.status)}</div>
             <div class="stage-v-title">${s.title}</div>
           </div>
-          ${det}
+          ${details}
         </div>`;
 
       vC.appendChild(el);
