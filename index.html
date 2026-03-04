@@ -3,630 +3,938 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Кейс · стратегический аудит</title>
+  <title>Emelin.Pro · Прогресс по кейсу</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* ========== СТИЛИ ПОЛНОСТЬЮ ИЗ client_v3.html (без изменений) ========== */
+    :root {
+      --primary: #1BA1FA;
+      --primary-dark: #0B7FD4;
+      --primary-light: #E8F5FE;
+      --primary-glow: rgba(27, 161, 250, 0.15);
+      --green: #10B981;
+      --green-light: #ECFDF5;
+      --green-dark: #059669;
+      --amber: #F59E0B;
+      --surface: #FFFFFF;
+      --bg: #F3F6FA;
+      --bg-subtle: #EDF1F7;
+      --text-primary: #0F1729;
+      --text-secondary: #4B5C72;
+      --text-muted: #8896A8;
+      --border: #E2E8F0;
+      --border-light: #F0F4F8;
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+      --radius-xl: 36px;
+      --shadow-sm: 0 1px 3px rgba(0,20,50,0.04);
+      --shadow-md: 0 8px 24px -8px rgba(0,20,50,0.08);
+      --shadow-lg: 0 20px 40px -12px rgba(0,20,50,0.12);
+      --shadow-glow: 0 0 0 4px var(--primary-glow);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: #f0f3f7;
-      color: #1e293b;
-      padding: 20px;
-    }
-    .client-card {
-      max-width: 1100px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: 32px;
-      box-shadow: 0 20px 35px -10px rgba(0,20,40,0.15);
-      padding: 32px 28px;
-    }
-    @media (max-width: 640px) {
-      body { padding: 12px; }
-      .client-card { padding: 24px 18px; }
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 24px 16px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .client-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-      font-weight: 500;
-      color: #1e3a5f;
+    .brand-bar {
+      max-width: 920px;
+      margin: 0 auto 20px;
+      padding: 0 4px;
+      animation: fadeDown 0.5s ease-out;
     }
 
-    .case-header {
-      margin-bottom: 20px;
-    }
-    .case-label {
-      font-size: 0.9rem;
-      color: #6b7a8f;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      display: block;
-    }
-    .case-title {
-      font-size: 1.7rem;
-      font-weight: 600;
-      color: #0f172a;
-      line-height: 1.3;
-    }
-
-    .timeline-container {
-      margin-bottom: 20px;
-      background: #f1f4f9;
-      border-radius: 40px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .timeline-bar {
-      flex: 1;
-      height: 8px;
-      background: #d9e2ef;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .timeline-progress {
-      height: 100%;
-      background: #1d4ed8;
-      border-radius: 8px;
-      width: 0%;
-      transition: width 0.3s;
-    }
-    .timeline-percent {
-      font-weight: 600;
-      color: #1d4ed8;
-      white-space: nowrap;
-    }
-
-    /* ответственный */
-    .responsible-block {
-      margin-bottom: 30px;
-      cursor: pointer;
-      user-select: none;
-    }
-    .responsible-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 500;
-      color: #1e3a5f;
-    }
-    .responsible-header .hint {
-      font-size: 0.8rem;
-      color: #7f8fa3;
-      margin-left: 4px;
-    }
-    .responsible-details {
-      margin-top: 12px;
-      display: none;
-      align-items: center;
-      gap: 16px;
-      background: #f8fafd;
-      padding: 16px;
-      border-radius: 24px;
-      border: 1px solid #eef3f9;
-    }
-    .responsible-details.expanded {
-      display: flex;
-    }
-    .responsible-avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 64px;
-      object-fit: cover;
-      border: 2px solid #fff;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-    .responsible-info {
-      flex: 1;
-    }
-    .responsible-name {
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-    }
-    .responsible-contacts {
-      display: flex;
-      gap: 16px;
-    }
-    .contact-link {
+    .brand-logo {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 10px;
       text-decoration: none;
-      color: #1e3a5f;
-      font-size: 0.9rem;
-    }
-    .contact-link img {
-      width: 20px;
-      height: 20px;
     }
 
-    /* горизонтальный прогресс */
-    .progress-horizontal {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      position: relative;
-      padding: 8px 0;
-      width: 100%;
+    .brand-logo-text {
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -0.03em;
+      color: var(--primary);
     }
-    /* линия теперь рисуется через псевдоэлемент, прикреплённый к родителю */
-    .progress-horizontal::before {
+
+    .brand-logo-text span { color: var(--text-muted); font-weight: 600; }
+
+    .case-card {
+      max-width: 920px;
+      margin: 0 auto;
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: fadeUp 0.6s ease-out;
+      position: relative;
+    }
+
+    .case-sticky-header {
+      padding: 32px 32px 0;
+      transition: box-shadow 0.25s, padding 0.25s;
+      background: var(--surface);
+      z-index: 10;
+    }
+
+    .case-sticky-header.is-sticky { position: sticky; top: 0; }
+    .case-sticky-header.stuck { padding: 16px 32px; box-shadow: 0 4px 20px -4px rgba(0,20,50,0.1); border-bottom: 1px solid var(--border-light); }
+    .case-sticky-header.stuck .client-tag { margin-bottom: 8px; }
+    .case-sticky-header.stuck .case-title { font-size: 1.2rem; }
+    .case-sticky-header.stuck .progress-overview { margin: 12px 0 0; }
+    .case-sticky-header.stuck .progress-track { margin: 10px 0 0; }
+    .case-sticky-header.stuck .coordinator-dropdown.visible { display: none; }
+
+    .client-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+      letter-spacing: 0.01em;
+    }
+
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .case-title {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1.25;
+      transition: font-size 0.25s;
+    }
+
+    .coordinator-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg);
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .coordinator-toggle:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .coordinator-toggle svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .coordinator-toggle .chevron { width: 12px; height: 12px; transition: transform 0.25s; margin-left: 2px; }
+    .coordinator-toggle.open .chevron { transform: rotate(180deg); }
+
+    .coordinator-dropdown {
+      display: none;
+      margin-top: 12px;
+      padding: 16px 20px;
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      animation: slideDown 0.25s ease-out;
+    }
+    .coordinator-dropdown.visible { display: block; }
+
+    .coordinator-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .coordinator-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #50C3FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .coordinator-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .coordinator-info { display: flex; flex-direction: column; }
+    .coordinator-name { font-weight: 700; font-size: 0.95rem; color: var(--text-primary); }
+    .coordinator-role { font-size: 0.78rem; color: var(--text-muted); }
+
+    .coordinator-contacts { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--surface);
+    }
+
+    .contact-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .contact-btn svg { width: 14px; height: 14px; }
+
+    .contact-icon-btn { display: none; }
+
+    .progress-overview {
+      margin: 28px 32px 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: margin 0.25s;
+    }
+
+    .progress-percent {
+      font-family: 'Manrope', system-ui, sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .progress-label { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+
+    .progress-track {
+      margin: 20px 32px 0;
+      height: 6px;
+      background: var(--bg-subtle);
+      border-radius: 100px;
+      overflow: hidden;
+      transition: margin 0.25s;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--green), var(--primary));
+      transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .stages-section { padding: 28px 32px 32px; }
+
+    /* Desktop horizontal */
+    .stages-horizontal {
+      display: flex;
+      gap: 10px;
+      position: relative;
+    }
+
+    .stage-card-h {
+      flex: 1; min-width: 0;
+      border-radius: var(--radius-md);
+      padding: 20px 16px 16px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 2px solid transparent;
+      background: var(--bg);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Соединительная линия */
+    .stages-horizontal::before {
       content: '';
       position: absolute;
-      top: 38px;
-      left: 0;
-      right: 0;
+      top: 38px; /* центр кружка */
+      left: 40px;
+      right: 40px;
       height: 3px;
       background: linear-gradient(90deg, #d0dbea, #a6b8cf);
       border-radius: 6px;
       z-index: 0;
-      margin-left: 40px;
-      margin-right: 40px;
     }
-    .step-h {
-      position: relative;
-      z-index: 2;
-      flex: 1 1 0;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      background: transparent;
-      border-radius: 20px;
-      transition: flex 0.2s, background 0.2s;
-      cursor: pointer;
+
+    .stage-card-h:hover {
+      border-color: var(--border);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
-    .step-h .hint-icon {
-      font-size: 0.8rem;
-      color: #8a9bb5;
-      margin-top: 4px;
-      opacity: 0.7;
+
+    .stage-card-h.completed { background: var(--green-light); }
+    .stage-card-h.completed:hover { border-color: var(--green); }
+    .stage-card-h.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-2px);
     }
-    .step-h.expanded {
-      flex: 2 1 0;
-      background: #f5faff;
-      box-shadow: 0 8px 22px -14px #1d4ed850, 0 0 0 1px #cddfff inset;
-    }
-    .circle {
-      width: 52px;
-      height: 52px;
-      border-radius: 52px;
-      background: white;
-      border: 2.5px solid #d8e0e8;
+    .stage-card-h.pending { background: var(--bg); opacity: 0.7; }
+    .stage-card-h.pending:hover { opacity: 1; }
+
+    .stage-number {
+      width: 36px; height: 36px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 600;
-      font-size: 1.3rem;
-      color: #405571;
+      font-weight: 700;
+      font-size: 0.9rem;
       margin-bottom: 8px;
-      box-shadow: 0 6px 12px -6px rgba(0,32,64,0.08);
     }
-    .completed .circle { background: #0f6e4a; border-color: #0f6e4a; color: white; }
-    .active .circle   { background: #1d4ed8; border-color: #1d4ed8; color: white; }
-    .pending .circle  { background: #ffffff; border-color: #9aaec5; color: #2b3f5c; }
 
-    /* статус этапа под кружком */
-    .status-badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 30px;
-      background: #f1f4f9;
-      color: #43566e;
-      display: inline-block;
+    .completed .stage-number { background: var(--green); color: white; }
+    .active .stage-number { background: var(--primary); color: white; box-shadow: 0 4px 12px -2px rgba(27,161,250,0.4); }
+    .pending .stage-number { background: var(--border); color: var(--text-muted); }
+
+    .stage-title-h {
+      font-weight: 700;
+      font-size: 0.92rem;
       margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+
+    .stage-status-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.72rem;
+      font-weight: 700;
       text-transform: uppercase;
-    }
-    .completed .status-badge { background: #e0f2e9; color: #0b5e42; }
-    .active .status-badge    { background: #e2edff; color: #1d4ed8; }
-    .pending .status-badge   { background: #f1f4f9; color: #5f6f84; }
-
-    .label {
-      font-weight: 600;
-      font-size: 1rem;
-      color: #1f2a41;
-      padding: 0 4px;
+      letter-spacing: 0.04em;
+      padding: 3px 10px;
+      border-radius: 100px;
+      margin-bottom: 8px;
     }
 
-    /* описание этапа */
-    .step-description {
-      font-size: 0.85rem;
-      color: #2b4058;
-      background: #ffffff;
-      padding: 10px 12px;
-      border-radius: 16px;
-      margin: 8px 12px 12px 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-      border: 1px solid #e4ecf7;
-      width: calc(100% - 24px);
-      text-align: left;
-    }
-    .step-h:not(.expanded) .step-description {
+    .completed .stage-status-badge { background: rgba(16,185,129,0.15); color: var(--green-dark); }
+    .active .stage-status-badge { background: rgba(27,161,250,0.15); color: var(--primary-dark); }
+    .pending .stage-status-badge { background: var(--border-light); color: var(--text-muted); }
+
+    .stage-details-h {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
       display: none;
     }
-    .work-days-info {
-      font-weight: 600;
-      color: #1d4ed8;
-      margin-top: 6px;
+
+    .stage-card-h.expanded .stage-details-h {
+      display: block;
+      animation: slideDown 0.25s ease-out;
     }
 
-    /* горизонтальный скролл */
-    .progress-horizontal.scrollable {
-      overflow-x: auto;
-      padding-bottom: 12px;
-      scrollbar-width: thin;
-    }
-    .progress-horizontal.scrollable .step-h {
-      flex: 0 0 180px;
-    }
-    .progress-horizontal.scrollable .step-h.expanded {
-      flex: 0 0 260px;
+    .detail-eta {
+      display: flex; align-items: center; gap: 5px;
+      margin-top: 8px;
+      font-weight: 600; color: var(--primary-dark); font-size: 0.8rem;
     }
 
-    /* вертикальный прогресс */
-    .progress-vertical {
+    .detail-eta svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    .manager-comment {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: rgba(27,161,250,0.06);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--primary);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .manager-comment-label {
+      font-weight: 700; color: var(--primary-dark);
+      font-size: 0.72rem; text-transform: uppercase;
+      letter-spacing: 0.04em; margin-bottom: 3px;
+    }
+
+    .expand-hint {
+      font-size: 0.72rem; color: var(--text-muted);
+      margin-top: 8px; opacity: 0; transition: opacity 0.2s;
+    }
+
+    .stage-card-h:not(.active):not(.expanded):hover .expand-hint { opacity: 1; }
+
+    /* Vertical stages */
+    .stages-vertical {
       display: none;
       flex-direction: column;
       position: relative;
-      padding-left: 38px;
+      padding-left: 44px;
     }
-    .progress-vertical::before {
+
+    .stages-vertical::before {
       content: '';
       position: absolute;
-      left: 20px;
-      top: 18px;
-      bottom: 18px;
-      width: 3px;
-      background: linear-gradient(to bottom, #d0dbea, #a6b8cf);
-      border-radius: 6px;
+      left: 21px; top: 24px; bottom: 24px;
+      width: 2px;
+      background: var(--border);
+      border-radius: 2px;
     }
-    .step-v {
-      position: relative;
-      margin-bottom: 32px;
-      cursor: pointer;
-    }
-    .step-v .circle {
+
+    .stage-v { position: relative; padding: 12px 0; }
+
+    .stage-v .stage-number {
       position: absolute;
-      left: -38px;
-      top: 0;
-      width: 44px;
-      height: 44px;
-      font-size: 1.1rem;
-      border-width: 2px;
-      margin: 0;
+      left: -44px; top: 12px;
+      width: 42px; height: 42px;
+      font-size: 0.95rem; z-index: 2;
     }
-    .step-v .content {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 18px 18px 18px 24px;
-      box-shadow: 0 6px 18px -10px #14243330, 0 0 0 1px #eef4fa inset;
+
+    .stage-v-body {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s;
     }
-    .step-v .status-badge {
-      font-size: 0.7rem;
-      padding: 3px 10px;
-      margin-bottom: 8px;
-      display: inline-block;
+
+    .stage-v.completed .stage-v-body { background: var(--green-light); }
+    .stage-v.active .stage-v-body { background: var(--primary-light); border-color: var(--primary); box-shadow: var(--shadow-glow); }
+    .stage-v.pending .stage-v-body { opacity: 0.7; }
+
+    .stage-v-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
     }
-    .step-v .label {
-      font-size: 1.15rem;
+
+    .stage-v-title { font-weight: 700; font-size: 1.05rem; order: 2; }
+    .stage-v-header .stage-status-badge { order: 1; }
+
+    .stage-v-details {
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px dashed rgba(0,0,0,0.08);
+      font-size: 0.88rem; color: var(--text-secondary);
+      line-height: 1.55; display: none;
+    }
+
+    .stage-v.expanded .stage-v-details {
+      display: block;
+      animation: slideDown 0.25s ease-out;
+    }
+
+    .case-footer {
+      padding: 0 32px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
     }
-    .step-v .details-text {
-      font-size: 0.9rem;
-      color: #365073;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px dashed #cbd5e2;
-      display: none;
+
+    .footer-update {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; color: var(--text-muted);
     }
-    .step-v.expanded .details-text {
-      display: block;
+
+    .update-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
     }
-    .active .content { background: #f5faff; }
+
+    .footer-link {
+      font-size: 0.78rem; color: var(--primary);
+      text-decoration: none; font-weight: 600;
+    }
+    .footer-link:hover { text-decoration: underline; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .contact-btn { display: none; }
+      .contact-icon-btn {
+        display: flex;
+        align-items: center; justify-content: center;
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+      .contact-icon-btn:hover,
+      .contact-icon-btn:active {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: var(--primary-light);
+      }
+      .contact-icon-btn svg { width: 18px; height: 18px; }
+      .coordinator-contacts { gap: 10px; }
+    }
 
     @media (min-width: 769px) {
-      .progress-horizontal { display: flex; }
-      .progress-vertical { display: none; }
-    }
-    @media (max-width: 768px) {
-      .progress-horizontal { display: none; }
-      .progress-vertical { display: flex; }
+      .stages-horizontal { display: flex; }
+      .stages-vertical { display: none; }
     }
 
-    .info-hint {
-      margin-top: 20px;
-      color: #7f8fa3;
-      text-align: center;
-      font-size: 0.9rem;
+    @media (max-width: 768px) {
+      body { padding: 12px 8px; }
+      .brand-bar { margin-bottom: 12px; }
+      .stages-horizontal { display: none; }
+      .stages-vertical { display: flex; }
+      .case-sticky-header { padding: 24px 20px 0; }
+      .case-sticky-header.stuck { padding: 12px 20px; }
+      .progress-overview { margin: 20px 20px 0; }
+      .progress-track { margin: 16px 20px 0; }
+      .stages-section { padding: 24px 20px 24px; }
+      .case-footer { padding: 0 20px 24px; }
+      .header-top-row { flex-direction: column; }
+      .case-title { font-size: 1.3rem; }
+      .progress-percent { font-size: 1.8rem; }
+    }
+
+    @media (max-width: 420px) {
+      .case-card { border-radius: var(--radius-lg); }
+    }
+
+    /* Scrollable */
+    .stages-horizontal.scrollable {
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .stages-horizontal.scrollable .stage-card-h { flex: 0 0 200px; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes slideDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+    @keyframes stageEnter { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+    .stage-animate { animation: stageEnter 0.4s ease-out both; }
+
+    .flash-update { animation: flashBorder 1.5s ease-out; }
+    @keyframes flashBorder {
+      0% { box-shadow: 0 0 0 0 rgba(27,161,250,0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(27,161,250,0); }
+      100% { box-shadow: none; }
     }
   </style>
 </head>
 <body>
-<div class="client-card" id="clientCard">
-  <div class="client-info">💼 <span id="clientNameDisplay">Концедалов С.И.</span></div>
 
-  <div class="case-header">
-    <span class="case-label">Кейс</span>
-    <span class="case-title" id="caseNameDisplay">Стратегический аудит ситуации и выбор модели исполнения обязательств</span>
-  </div>
+<div class="brand-bar">
+  <a href="#" class="brand-logo">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="8" fill="#1BA1FA"/>
+      <path d="M7 9h14M7 14h10M7 19h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+    <div class="brand-logo-text">EMELIN<span>.PRO</span></div>
+  </a>
+</div>
 
-  <div class="timeline-container" id="timelineContainer">
-    <div class="timeline-bar"><div class="timeline-progress" id="timelineProgress"></div></div>
-    <span class="timeline-percent" id="timelinePercent">0%</span>
-  </div>
+<div class="case-card" id="caseCard">
 
-  <div class="responsible-block" id="responsibleBlock">
-    <div class="responsible-header">
-      <span class="responsible-icon">🎓</span>
-      <span>ваш координатор</span>
-      <span class="hint">🔽</span>
+  <!-- Sticky header -->
+  <div class="case-sticky-header" id="stickyHeader">
+    <div class="client-tag">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      <span id="clientNameDisplay">—</span>
     </div>
-    <div class="responsible-details" id="responsibleDetails">
-      <img class="responsible-avatar" id="responsibleAvatar" src="" alt="">
-      <div class="responsible-info">
-        <div class="responsible-name" id="responsibleNameDisplay"></div>
-        <div class="responsible-contacts" id="responsibleContacts"></div>
+
+    <div class="header-top-row">
+      <h1 class="case-title" id="caseTitleDisplay">—</h1>
+
+      <div class="coordinator-toggle" id="coordToggle" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Ваш координатор</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
+
+    <div class="coordinator-dropdown" id="coordDropdown">
+      <div class="coordinator-top">
+        <div class="coordinator-avatar" id="coordAvatar">—</div>
+        <div class="coordinator-info">
+          <div class="coordinator-name" id="coordName">—</div>
+          <div class="coordinator-role" id="coordRole">—</div>
+        </div>
+      </div>
+      <div class="coordinator-contacts" id="coordContacts"></div>
+    </div>
+
+    <div class="progress-overview">
+      <div class="progress-percent" id="progressPercent">0%</div>
+      <div class="progress-label" id="progressLabel">—</div>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
   </div>
 
-  <div class="progress-horizontal" id="progressHorizontal"></div>
-  <div class="progress-vertical" id="progressVertical"></div>
-  <div class="info-hint">📋 Данные обновляются автоматически</div>
+  <div class="stages-section">
+    <div class="stages-horizontal" id="stagesH"></div>
+    <div class="stages-vertical" id="stagesV"></div>
+  </div>
+
+  <div class="case-footer">
+    <div class="footer-update">
+      <div class="update-dot"></div>
+      <span id="updateTime">Загрузка…</span>
+    </div>
+    <a href="#" class="footer-link">emelin.pro</a>
+  </div>
+
 </div>
 
 <script>
-  (function() {
-    const BIN_ID = '69a5c886ae596e708f586c95';
-    const API_KEY = '$2a$10$04rxd6FFWKwU6F5lh7rxfepeHDiMl50NHzePfFIwq71to/inJGDgW';
-    const BASE_URL = 'https://api.jsonbin.io/v3/b';
+(function() {
+  const BIN_ID = '69a5c886ae596e708f586c95';
+  const API_KEY = '$2a$10$04rxd6FFWKwU6F5lh7rxfepeHDiMl50NHzePfFIwq71to/inJGDgW';
+  const BASE_URL = 'https://api.jsonbin.io/v3/b';
 
-    const defaultData = {
-      caseName: 'Стратегический аудит ситуации и выбор модели исполнения обязательств',
-      clientName: 'Концедалов С.И.',
-      responsible: {
-        name: 'Иван Петров',
-        avatar: 'https://i.pravatar.cc/150?u=ivan',
-        telegram: '@ivanov',
-        whatsapp: '+79991234567'
-      },
-      stages: [
-        { id: 0, title: 'Брифинг и анализ задачи', description: 'Клиентский менеджер уточняет основные моменты задачи и ожидания по результату.', summary: 'Проведён первичный бриф, зафиксированы цели.', nextActions: 'Ожидайте коммерческое предложение.', status: 'completed', startDate: '2026-03-01', endDate: '2026-03-02' },
-        { id: 1, title: 'Подготовка коммерческого предложения', description: 'Менеджер готовит КП на основе брифа, берёт тайм-аут.', summary: 'КП подготовлено и направлено клиенту.', nextActions: 'Рассмотрите предложение и дайте обратную связь.', status: 'completed', startDate: '2026-03-03', endDate: '2026-03-05' },
-        { id: 2, title: 'Согласование и оплата', description: 'Подписание соглашения, фиксация договорённостей, внесение установочного платежа или ретейнера.', summary: 'Договор подписан, оплата поступила.', nextActions: 'После оплаты передайте документы и информацию.', status: 'active', startDate: '2026-03-06', endDate: '2026-03-09' },
-        { id: 3, title: 'Передача информации', description: 'Клиент предоставляет необходимые документы, даёт пояснения.', summary: 'Все материалы получены.', nextActions: 'Передайте документы и пояснения эксперту.', status: 'pending', startDate: '2026-03-10', endDate: '2026-03-12' },
-        { id: 4, title: 'Экспертный анализ', description: 'Эксперт изучает материалы, при необходимости задаёт уточняющие вопросы.', summary: 'Анализ завершён, подготовлены выводы.', nextActions: 'Эксперт свяжется для уточнений.', status: 'pending', startDate: '2026-03-13', endDate: '2026-03-20' },
-        { id: 5, title: 'Презентация результатов', description: 'Эксперт представляет итоги анализа, модели поведения, рекомендованный вариант, передаёт письменный отчёт.', summary: 'Презентация проведена, отчёт передан.', nextActions: 'Ознакомьтесь с результатами, подготовьте вопросы.', status: 'pending', startDate: '2026-03-21', endDate: '2026-03-22' },
-        { id: 6, title: 'Обратная связь', description: 'Клиентский менеджер уточняет удовлетворённость работой эксперта и готовность к реализации.', summary: 'Обратная связь получена, определены следующие шаги.', nextActions: 'Сообщите ваши впечатления и планы.', status: 'pending', startDate: '2026-03-23', endDate: '2026-03-24' }
-      ]
-    };
+  // Данные по умолчанию (новый кейс)
+  const defaultData = {
+    caseName: 'Стратегический аудит ситуации и выбор модели исполнения обязательств',
+    clientName: 'Концедалов С.И.',
+    responsible: {
+      name: 'Иван Петров',
+      position: 'клиентский менеджер',
+      phone: '+7 (999) 123-45-67',
+      avatar: '' // можно указать URL аватарки
+    },
+    stages: [
+      { id:0, title:'Брифинг и анализ задачи', description:'Клиентский менеджер уточняет основные моменты задачи и ожидания по результату.', summary:'Проведён первичный бриф, зафиксированы цели.', nextActions:'Ожидайте коммерческое предложение.', status:'completed', startDate:'2026-03-01', endDate:'2026-03-02' },
+      { id:1, title:'Подготовка коммерческого предложения', description:'Менеджер готовит КП на основе брифа, берёт тайм-аут.', summary:'КП подготовлено и направлено клиенту.', nextActions:'Рассмотрите предложение и дайте обратную связь.', status:'completed', startDate:'2026-03-03', endDate:'2026-03-05' },
+      { id:2, title:'Согласование и оплата', description:'Подписание соглашения, фиксация договорённостей, внесение установочного платежа или ретейнера.', summary:'Договор подписан, оплата поступила.', nextActions:'После оплаты передайте документы и информацию.', status:'active', startDate:'2026-03-06', endDate:'2026-03-09' },
+      { id:3, title:'Передача информации', description:'Клиент предоставляет необходимые документы, даёт пояснения.', summary:'Все материалы получены.', nextActions:'Передайте документы и пояснения эксперту.', status:'pending', startDate:'2026-03-10', endDate:'2026-03-12' },
+      { id:4, title:'Экспертный анализ', description:'Эксперт изучает материалы, при необходимости задаёт уточняющие вопросы.', summary:'Анализ завершён, подготовлены выводы.', nextActions:'Эксперт свяжется для уточнений.', status:'pending', startDate:'2026-03-13', endDate:'2026-03-20' },
+      { id:5, title:'Презентация результатов', description:'Эксперт представляет итоги анализа, модели поведения, рекомендованный вариант, передаёт письменный отчёт.', summary:'Презентация проведена, отчёт передан.', nextActions:'Ознакомьтесь с результатами, подготовьте вопросы.', status:'pending', startDate:'2026-03-21', endDate:'2026-03-22' },
+      { id:6, title:'Обратная связь', description:'Клиентский менеджер уточняет удовлетворённость работой эксперта и готовность к реализации.', summary:'Обратная связь получена, определены следующие шаги.', nextActions:'Сообщите ваши впечатления и планы.', status:'pending', startDate:'2026-03-23', endDate:'2026-03-24' }
+    ]
+  };
 
-    async function loadData() {
-      try {
-        const response = await fetch(`${BASE_URL}/${BIN_ID}/latest`, {
-          headers: { 'X-Master-Key': API_KEY }
-        });
-        if (!response.ok) throw new Error('Ошибка загрузки');
-        const result = await response.json();
-        return result.record;
-      } catch (error) {
-        console.warn('Не удалось загрузить из jsonbin, используем defaultData');
-        return defaultData;
-      }
+  let lastDataHash = '';
+
+  async function loadData() {
+    try {
+      const r = await fetch(`${BASE_URL}/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+      if (!r.ok) throw new Error();
+      return (await r.json()).record;
+    } catch(e) { return defaultData; }
+  }
+
+  function statusText(s) {
+    if (s === 'completed') return 'Завершено';
+    if (s === 'active') return 'В работе';
+    return 'Предстоит';
+  }
+
+  function getInitials(n) { return n ? n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : '?'; }
+
+  function cleanPhone(p) { return p.replace(/[^\d+]/g, ''); }
+
+  // Функции для работы с рабочими днями
+  function countWorkingDays(start, end) {
+    if (!start || !end) return null;
+    const startDate = new Date(start + 'T00:00:00');
+    const endDate = new Date(end + 'T23:59:59');
+    if (startDate > endDate) return 0;
+    let count = 0;
+    const current = new Date(startDate);
+    while (current <= endDate) {
+      const day = current.getDay();
+      if (day !== 0 && day !== 6) count++;
+      current.setDate(current.getDate() + 1);
     }
+    return count;
+  }
 
-    // Рабочие дни
-    function countWorkingDays(start, end) {
-      if (!start || !end) return null;
-      const startDate = new Date(start + 'T00:00:00');
-      const endDate = new Date(end + 'T23:59:59');
-      if (startDate > endDate) return 0;
-      let count = 0;
-      const current = new Date(startDate);
-      while (current <= endDate) {
-        const day = current.getDay();
-        if (day !== 0 && day !== 6) count++;
-        current.setDate(current.getDate() + 1);
-      }
-      return count;
+  function elapsedWorkingDays(start) {
+    if (!start) return null;
+    const startDate = new Date(start + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (today < startDate) return 0;
+    let count = 0;
+    const current = new Date(startDate);
+    while (current <= today) {
+      const day = current.getDay();
+      if (day !== 0 && day !== 6) count++;
+      current.setDate(current.getDate() + 1);
     }
+    return count;
+  }
 
-    function elapsedWorkingDays(start) {
-      if (!start) return null;
-      const startDate = new Date(start + 'T00:00:00');
-      const today = new Date();
-      today.setHours(0,0,0,0);
-      if (today < startDate) return 0;
-      let count = 0;
-      const current = new Date(startDate);
-      while (current <= today) {
-        const day = current.getDay();
-        if (day !== 0 && day !== 6) count++;
-        current.setDate(current.getDate() + 1);
-      }
-      return count;
+  // Общий прогресс по датам (календарные дни)
+  function getOverallProgress(stages) {
+    const dates = stages.reduce((acc, s) => {
+      if (s.startDate) acc.push(new Date(s.startDate));
+      if (s.endDate) acc.push(new Date(s.endDate));
+      return acc;
+    }, []);
+    if (dates.length === 0) return 0;
+    const start = new Date(Math.min(...dates));
+    const end = new Date(Math.max(...dates));
+    const today = new Date();
+    if (today < start) return 0;
+    if (today > end) return 100;
+    const total = end - start;
+    const elapsed = today - start;
+    return Math.round((elapsed / total) * 100);
+  }
+
+  // Формирование текста для деталей этапа
+  function getDetailText(stage) {
+    if (stage.status === 'completed') return stage.summary || '—';
+    if (stage.status === 'active') return stage.description || '—';
+    return stage.nextActions || '—';
+  }
+
+  // Для активного этапа: строка "в работе X из Y дней"
+  function getWorkDaysInfo(stage) {
+    if (stage.status !== 'active' || !stage.startDate || !stage.endDate) return '';
+    const total = countWorkingDays(stage.startDate, stage.endDate);
+    const elapsed = elapsedWorkingDays(stage.startDate);
+    if (total === null || elapsed === null) return '';
+    return `<div class="detail-eta" style="font-weight:600; color:var(--primary-dark);">⏱️ в работе ${elapsed} из ${total} дней</div>`;
+  }
+
+  function updateTimestamp() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    document.getElementById('updateTime').textContent =
+      `Обновлено ${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()}, ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  }
+
+  // SVGs для контактов
+  const phoneSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>';
+  const waSvg='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.111.547 4.099 1.504 5.832L0 24l6.335-1.652A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-1.903 0-3.727-.528-5.313-1.527l-.38-.228-3.758.981.999-3.648-.25-.396A9.768 9.768 0 0 1 2.182 12c0-5.423 4.395-9.818 9.818-9.818S21.818 6.577 21.818 12s-4.395 9.818-9.818 9.818z"/></svg>';
+  const tgSvg='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 1 0 24 12.056A12.01 12.01 0 0 0 11.944 0Zm5.654 8.26-1.97 9.293c-.146.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.334-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.832.928Z"/></svg>';
+
+  // Coordinator toggle
+  const coordToggle = document.getElementById('coordToggle');
+  const coordDropdown = document.getElementById('coordDropdown');
+  coordToggle.addEventListener('click', ()=>{
+    coordToggle.classList.toggle('open');
+    coordDropdown.classList.toggle('visible');
+  });
+  document.addEventListener('click', e=>{
+    if (!coordToggle.contains(e.target) && !coordDropdown.contains(e.target)) {
+      coordToggle.classList.remove('open');
+      coordDropdown.classList.remove('visible');
     }
+  });
 
-    function getOverallProgress(stages) {
-      const dates = stages.reduce((acc, s) => {
-        if (s.startDate) acc.push(new Date(s.startDate));
-        if (s.endDate) acc.push(new Date(s.endDate));
-        return acc;
-      }, []);
-      if (dates.length === 0) return null;
-      const start = new Date(Math.min(...dates));
-      const end = new Date(Math.max(...dates));
-      const today = new Date();
-      if (today < start) return 0;
-      if (today > end) return 100;
-      const total = end - start;
-      const elapsed = today - start;
-      return Math.round((elapsed / total) * 100);
-    }
-
-    function getStatusText(status) {
-      if (status === 'completed') return 'Завершено';
-      if (status === 'active') return 'В работе';
-      return 'Предстоит';
-    }
-
-    function getDescriptionText(stage) {
-      if (stage.status === 'active') return stage.description || '';
-      if (stage.status === 'pending') return stage.description || '';
-      return stage.summary || '';
-    }
-
-    let expandedStageId = null;
-
-    function render(data) {
-      document.getElementById('clientNameDisplay').innerText = data.clientName;
-      document.getElementById('caseNameDisplay').innerText = data.caseName;
-
-      const overall = getOverallProgress(data.stages);
-      if (overall !== null) {
-        document.getElementById('timelineContainer').style.display = 'flex';
-        document.getElementById('timelineProgress').style.width = overall + '%';
-        document.getElementById('timelinePercent').innerText = overall + '%';
-      } else {
-        document.getElementById('timelineContainer').style.display = 'none';
-      }
-
-      const resp = data.responsible || {};
-      document.getElementById('responsibleNameDisplay').innerText = resp.name || '';
-      document.getElementById('responsibleAvatar').src = resp.avatar || '';
-      const contactsDiv = document.getElementById('responsibleContacts');
-      contactsDiv.innerHTML = '';
-      if (resp.telegram) {
-        const a = document.createElement('a');
-        a.href = resp.telegram.startsWith('http') ? resp.telegram : `https://t.me/${resp.telegram.replace('@','')}`;
-        a.target = '_blank';
-        a.className = 'contact-link';
-        a.innerHTML = '<img src="https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/telegram.svg" alt="Telegram" style="width:20px;height:20px;"> Telegram';
-        contactsDiv.appendChild(a);
-      }
-      if (resp.whatsapp) {
-        const a = document.createElement('a');
-        a.href = resp.whatsapp.startsWith('http') ? resp.whatsapp : `https://wa.me/${resp.whatsapp.replace(/\D/g,'')}`;
-        a.target = '_blank';
-        a.className = 'contact-link';
-        a.innerHTML = '<img src="https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/whatsapp.svg" alt="WhatsApp" style="width:20px;height:20px;"> WhatsApp';
-        contactsDiv.appendChild(a);
-      }
-      document.getElementById('responsibleDetails').classList.remove('expanded');
-
-      // Горизонтальный
-      const horizContainer = document.getElementById('progressHorizontal');
-      horizContainer.innerHTML = '';
-
-      if (expandedStageId === null) {
-        const active = data.stages.find(s => s.status === 'active');
-        expandedStageId = active ? active.id : (data.stages[0]?.id || null);
-      }
-
-      data.stages.forEach(stage => {
-        const stepDiv = document.createElement('div');
-        stepDiv.className = `step-h ${stage.status}`;
-        if (stage.id === expandedStageId) stepDiv.classList.add('expanded');
-        stepDiv.dataset.step = stage.id;
-
-        const descText = getDescriptionText(stage);
-        let extraHtml = '';
-        if (stage.status === 'active' && stage.startDate && stage.endDate) {
-          const totalDays = countWorkingDays(stage.startDate, stage.endDate);
-          const elapsed = elapsedWorkingDays(stage.startDate);
-          if (totalDays !== null && elapsed !== null) {
-            extraHtml = `<div class="work-days-info">⏱️ в работе ${elapsed} из ${totalDays} дней</div>`;
-          }
+  // Sticky header
+  let stickyObserver = null;
+  function initSticky(count) {
+    const header = document.getElementById('stickyHeader');
+    if (count >= 5) {
+      header.classList.add('is-sticky');
+      if (!stickyObserver) {
+        let sentinel = document.getElementById('stickySentinel');
+        if (!sentinel) {
+          sentinel = document.createElement('div');
+          sentinel.id = 'stickySentinel';
+          sentinel.style.cssText = 'height:1px;position:absolute;top:0;left:0;right:0;pointer-events:none;';
+          header.parentNode.insertBefore(sentinel, header);
         }
-        let expectationsHtml = '';
-        if (stage.status === 'active' && stage.nextActions) {
-          expectationsHtml = `<div style="margin-top:8px; background:#eef6ff; padding:8px; border-radius:12px;"><strong>Ожидания от клиента:</strong> ${stage.nextActions}</div>`;
-        }
+        stickyObserver = new IntersectionObserver(
+          ([e]) => header.classList.toggle('stuck', !e.isIntersecting),
+          { threshold: 1, rootMargin: '-1px 0px 0px 0px' }
+        );
+        stickyObserver.observe(sentinel);
+      }
+    } else {
+      header.classList.remove('is-sticky', 'stuck');
+    }
+  }
 
-        stepDiv.innerHTML = `
-          <div class="circle">${stage.id + 1}</div>
-          <div class="status-badge">${getStatusText(stage.status)}</div>
-          <div class="label">${stage.title}</div>
-          <div class="hint-icon">🔽</div>
-          ${descText ? `<div class="step-description">${descText.replace(/\n/g, '<br>')}${extraHtml}${expectationsHtml}</div>` : ''}
-        `;
-        horizContainer.appendChild(stepDiv);
+  let expandedStageId = null; // текущий раскрытый этап (кроме активного, который всегда раскрыт)
+
+  function render(data) {
+    document.getElementById('clientNameDisplay').textContent = data.clientName || '—';
+    document.getElementById('caseTitleDisplay').textContent = data.caseName || '—';
+
+    // Coordinator
+    const resp = data.responsible || {};
+    if (resp.name) {
+      coordToggle.style.display = '';
+      const av = document.getElementById('coordAvatar');
+      av.innerHTML = resp.avatar ? `<img src="${resp.avatar}" alt="${resp.name}">` : '';
+      if (!resp.avatar) av.textContent = getInitials(resp.name);
+      document.getElementById('coordName').textContent = resp.name;
+      document.getElementById('coordRole').textContent = resp.position || '';
+
+      const c = document.getElementById('coordContacts');
+      c.innerHTML = '';
+      if (resp.phone) {
+        const cl = cleanPhone(resp.phone);
+        c.innerHTML =
+          `<a class="contact-btn" href="tel:${cl}">${phoneSvg}<span>Позвонить</span></a>`+
+          `<a class="contact-btn" href="https://wa.me/${cl.replace('+','')}" target="_blank" rel="noopener">${waSvg}<span>WhatsApp</span></a>`+
+          `<a class="contact-btn" href="https://t.me/${cl.replace('+','')}" target="_blank" rel="noopener">${tgSvg}<span>Telegram</span></a>`+
+          `<a class="contact-icon-btn" href="tel:${cl}" title="Позвонить">${phoneSvg}</a>`+
+          `<a class="contact-icon-btn" href="https://wa.me/${cl.replace('+','')}" target="_blank" rel="noopener" title="WhatsApp">${waSvg}</a>`+
+          `<a class="contact-icon-btn" href="https://t.me/${cl.replace('+','')}" target="_blank" rel="noopener" title="Telegram">${tgSvg}</a>`;
+      }
+    } else {
+      coordToggle.style.display = 'none';
+    }
+
+    // Progress
+    const stages = data.stages || [];
+    const total = stages.length;
+    const completedCount = stages.filter(s => s.status === 'completed').length;
+    const activeIndex = stages.findIndex(s => s.status === 'active');
+    const overallPercent = getOverallProgress(stages);
+    document.getElementById('progressPercent').textContent = overallPercent + '%';
+    document.getElementById('progressFill').style.width = overallPercent + '%';
+    document.getElementById('progressLabel').textContent =
+      `Этап ${completedCount + (activeIndex >= 0 ? 1 : 0)} из ${total}`;
+
+    // Определяем, какой этап раскрыт (по умолчанию активный)
+    if (expandedStageId === null) {
+      const active = stages.find(s => s.status === 'active');
+      expandedStageId = active ? active.id : (stages[0]?.id || null);
+    }
+
+    // Horizontal stages
+    const hC = document.getElementById('stagesH');
+    hC.innerHTML = '';
+    stages.forEach((s, i) => {
+      const card = document.createElement('div');
+      card.className = `stage-card-h ${s.status} stage-animate`;
+      if (s.id === expandedStageId && s.status !== 'active') card.classList.add('expanded');
+      card.style.animationDelay = `${i*0.08}s`;
+      card.dataset.step = s.id;
+
+      // Детали
+      let det = `<div class="stage-details-h"><div>${getDetailText(s)}</div>`;
+      if (s.status === 'active') {
+        det += getWorkDaysInfo(s);
+      }
+      // Ожидания от клиента (только для активного)
+      if (s.status === 'active' && s.nextActions) {
+        det += `<div class="manager-comment"><div class="manager-comment-label">Ожидания от клиента</div>${s.nextActions}</div>`;
+      }
+      det += '</div>';
+
+      card.innerHTML = `
+        <div class="stage-number">${i+1}</div>
+        <div class="stage-status-badge">${statusText(s.status)}</div>
+        <div class="stage-title-h">${s.title}</div>
+        ${det}
+        <div class="expand-hint">Нажмите для деталей</div>`;
+
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (s.status === 'active') return; // активный не закрывается
+        // Закрыть предыдущий, открыть текущий
+        expandedStageId = s.id;
+        render(data); // перерисовка
       });
 
-      if (data.stages.length >= 6) horizContainer.classList.add('scrollable');
-      else horizContainer.classList.remove('scrollable');
-
-      // Вертикальный
-      const vertContainer = document.getElementById('progressVertical');
-      vertContainer.innerHTML = '';
-      data.stages.forEach(stage => {
-        let detailsText = getDescriptionText(stage);
-        if (stage.status === 'active' && stage.startDate && stage.endDate) {
-          const totalDays = countWorkingDays(stage.startDate, stage.endDate);
-          const elapsed = elapsedWorkingDays(stage.startDate);
-          if (totalDays !== null && elapsed !== null) {
-            detailsText += `\n\n⏱️ в работе ${elapsed} из ${totalDays} дней`;
-          }
-          if (stage.nextActions) {
-            detailsText += `\n\nОжидания от клиента: ${stage.nextActions}`;
-          }
-        }
-
-        const stepDiv = document.createElement('div');
-        stepDiv.className = `step-v ${stage.status}`;
-        if (stage.id === expandedStageId) stepDiv.classList.add('expanded');
-        stepDiv.dataset.step = stage.id;
-        stepDiv.innerHTML = `
-          <div class="circle">${stage.id + 1}</div>
-          <div class="content">
-            <div class="status-badge">${getStatusText(stage.status)}</div>
-            <div class="label">${stage.title}</div>
-            <div class="details-text">${detailsText.replace(/\n/g, '<br>')}</div>
-            <div style="font-size:0.8rem; color:#8a9bb5; margin-top:4px;">🔽</div>
-          </div>
-        `;
-        vertContainer.appendChild(stepDiv);
-      });
-    }
-
-    function handleStageClick(e) {
-      const step = e.target.closest('.step-h, .step-v');
-      if (!step) return;
-      const stepId = step.dataset.step;
-      if (stepId === undefined) return;
-      expandedStageId = parseInt(stepId);
-      fetchAndRender();
-    }
-
-    function handleResponsibleClick() {
-      document.getElementById('responsibleDetails').classList.toggle('expanded');
-    }
-
-    async function fetchAndRender() {
-      const data = await loadData();
-      render(data);
-    }
-
-    document.addEventListener('click', e => {
-      if (e.target.closest('.step-h, .step-v')) handleStageClick(e);
-      else if (e.target.closest('#responsibleBlock')) handleResponsibleClick();
+      hC.appendChild(card);
     });
 
-    fetchAndRender();
-    setInterval(fetchAndRender, 300000);
-  })();
+    hC.classList.toggle('scrollable', stages.length >= 5);
+
+    // Vertical stages
+    const vC = document.getElementById('stagesV');
+    vC.innerHTML = '';
+    stages.forEach((s, i) => {
+      const el = document.createElement('div');
+      el.className = `stage-v ${s.status} stage-animate`;
+      if (s.id === expandedStageId && s.status !== 'active') el.classList.add('expanded');
+      el.style.animationDelay = `${i*0.08}s`;
+      el.dataset.step = s.id;
+
+      let det = `<div class="stage-v-details"><div>${getDetailText(s)}</div>`;
+      if (s.status === 'active') {
+        det += getWorkDaysInfo(s);
+      }
+      if (s.status === 'active' && s.nextActions) {
+        det += `<div class="manager-comment"><div class="manager-comment-label">Ожидания от клиента</div>${s.nextActions}</div>`;
+      }
+      det += '</div>';
+
+      el.innerHTML = `
+        <div class="stage-number">${i+1}</div>
+        <div class="stage-v-body">
+          <div class="stage-v-header">
+            <div class="stage-status-badge">${statusText(s.status)}</div>
+            <div class="stage-v-title">${s.title}</div>
+          </div>
+          ${det}
+        </div>`;
+
+      el.querySelector('.stage-v-body').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (s.status === 'active') return;
+        expandedStageId = s.id;
+        render(data);
+      });
+
+      vC.appendChild(el);
+    });
+
+    initSticky(stages.length);
+    updateTimestamp();
+  }
+
+  function hashData(d) { return JSON.stringify(d.stages?.map(s => s.status)); }
+
+  async function fetchAndRender() {
+    const data = await loadData();
+    const h = hashData(data);
+    if (lastDataHash && h !== lastDataHash) {
+      document.getElementById('caseCard').classList.add('flash-update');
+      setTimeout(()=>document.getElementById('caseCard').classList.remove('flash-update'), 1500);
+    }
+    lastDataHash = h;
+    render(data);
+  }
+
+  fetchAndRender();
+  setInterval(fetchAndRender, 300000);
+})();
 </script>
 </body>
 </html>
