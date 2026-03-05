@@ -583,6 +583,33 @@
       70% { box-shadow: 0 0 0 8px rgba(27,161,250,0); }
       100% { box-shadow: none; }
     }
+
+    /* Сообщение об ошибке */
+    .error-message {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 40px 20px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+      color: var(--text-secondary);
+    }
+    
+    .error-message h2 {
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    
+    .error-message a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .error-message a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -649,10 +676,25 @@
 
 </div>
 
+<!-- Контейнер для сообщения об ошибке (скрыт по умолчанию) -->
+<div id="errorContainer" style="display: none;">
+  <div class="error-message">
+    <h2>Кейс не найден</h2>
+    <p>Проверьте ссылку или обратитесь к вашему менеджеру.</p>
+    <p><a href="#" onclick="location.reload()">Попробовать снова</a></p>
+  </div>
+</div>
+
 <script>
 (function() {
-  const BIN_ID = '69a5c886ae596e708f586c95';
-  const API_KEY = '$2a$10$04rxd6FFWKwU6F5lh7rxfepeHDiMl50NHzePfFIwq71to/inJGDgW';
+  // ===== ПОЛУЧАЕМ ID ИЗ URL =====
+  const urlParams = new URLSearchParams(window.location.search);
+  const BIN_ID = urlParams.get('id');
+  
+  // Используем ID из URL 
+  const ACTUAL_BIN_ID = BIN_ID;
+  
+  const API_KEY = '$2a$10$YvnYK1Cpzh4XADw4YOLGzON7/XE0yY3PywOinHRc9HVOkwXjuosny';
   const BASE_URL = 'https://api.jsonbin.io/v3/b';
 
   let previewData = null;
@@ -663,36 +705,58 @@
     }
   }
 
-  const defaultData = {
-    caseName: 'Стратегический аудит ситуации и выбор модели исполнения обязательств',
-    clientName: 'Концедалов С.И.',
-    expert: {
-      name: 'Иван Петров',
-      avatar: '',
-      phone: '+7 (999) 123-45-67',
-      telegram: 'ivan_petrov',
-      whatsapp: '79991234567'
-    },
-    stages: [
-      { id:0, title:'Брифинг и анализ задачи', description:'Клиентский менеджер уточняет основные моменты задачи и ожидания по результату.', summary:'Проведён первичный бриф, зафиксированы цели.', nextActions:'Ожидайте коммерческое предложение.', status:'completed', startDate:'2026-03-01', endDate:'2026-03-02', materials:'' },
-      { id:1, title:'Подготовка коммерческого предложения', description:'Менеджер готовит КП на основе брифа, берёт тайм-аут.', summary:'КП подготовлено и направлено клиенту.', nextActions:'Рассмотрите предложение и дайте обратную связь.', status:'completed', startDate:'2026-03-03', endDate:'2026-03-05', materials:'https://example.com/kp.pdf' },
-      { id:2, title:'Согласование и оплата', description:'Подписание соглашения, фиксация договорённостей, внесение установочного платежа или ретейнера.', summary:'Договор подписан, оплата поступила.', nextActions:'После оплаты передайте документы и информацию.', status:'active', startDate:'2026-03-06', endDate:'2026-03-09', materials:'' },
-      { id:3, title:'Передача информации', description:'Клиент предоставляет необходимые документы, даёт пояснения.', summary:'Все материалы получены.', nextActions:'Передайте документы и пояснения эксперту.', status:'pending', startDate:'2026-03-10', endDate:'2026-03-12', materials:'' },
-      { id:4, title:'Экспертный анализ', description:'Эксперт изучает материалы, при необходимости задаёт уточняющие вопросы.', summary:'Анализ завершён, подготовлены выводы.', nextActions:'Эксперт свяжется для уточнений.', status:'pending', startDate:'2026-03-13', endDate:'2026-03-20', materials:'' },
-      { id:5, title:'Презентация результатов', description:'Эксперт представляет итоги анализа, модели поведения, рекомендованный вариант, передаёт письменный отчёт.', summary:'Презентация проведена, отчёт передан.', nextActions:'Ознакомьтесь с результатами, подготовьте вопросы.', status:'pending', startDate:'2026-03-21', endDate:'2026-03-22', materials:'https://example.com/presentation.pdf' },
-      { id:6, title:'Обратная связь', description:'Клиентский менеджер уточняет удовлетворённость работой эксперта и готовность к реализации.', summary:'Обратная связь получена, определены следующие шаги.', nextActions:'Сообщите ваши впечатления и планы.', status:'pending', startDate:'2026-03-23', endDate:'2026-03-24', materials:'' }
-    ]
-  };
 
   let lastDataHash = '';
 
   async function loadData() {
+    // Если есть previewData, возвращаем его
     if (previewData) return previewData;
+    
+    // Если ID не указан, используем дефолтный (но предупреждаем)
+    if (!BIN_ID) {
+      console.warn('Параметр id не указан в URL. Используется кейс по умолчанию.');
+    }
+    
     try {
-      const r = await fetch(`${BASE_URL}/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
-      if (!r.ok) throw new Error();
+      const r = await fetch(`${BASE_URL}/${ACTUAL_BIN_ID}/latest`, { 
+        headers: { 'X-Access-Key': API_KEY } 
+      });
+      
+      if (!r.ok) {
+        if (r.status === 404 || r.status === 400) {
+          throw new Error('BIN_NOT_FOUND');
+        }
+        throw new Error('FETCH_ERROR');
+      }
+      
       return (await r.json()).record;
-    } catch(e) { return defaultData; }
+    } catch(e) {
+      console.error('Ошибка загрузки данных:', e);
+      
+      // Показываем сообщение об ошибке пользователю
+      const caseCard = document.getElementById('caseCard');
+      const errorContainer = document.getElementById('errorContainer');
+      
+      if (caseCard) caseCard.style.display = 'none';
+      if (errorContainer) {
+        errorContainer.style.display = 'block';
+        
+        // Настраиваем текст в зависимости от ошибки
+        const errorTitle = errorContainer.querySelector('h2');
+        const errorText = errorContainer.querySelector('p');
+        
+        if (e.message === 'BIN_NOT_FOUND') {
+          if (errorTitle) errorTitle.textContent = 'Кейс не найден';
+          if (errorText) errorText.textContent = 'Кейс с указанным ID не существует. Проверьте ссылку.';
+        } else {
+          if (errorTitle) errorTitle.textContent = 'Ошибка загрузки';
+          if (errorText) errorText.textContent = 'Не удалось загрузить данные. Попробуйте позже.';
+        }
+      }
+      
+      // Возвращаем null, чтобы рендер не выполнялся
+      return null;
+    }
   }
 
   function statusText(s) {
@@ -884,6 +948,13 @@
   }
 
   function render(data) {
+    // Если данные не загрузились, ничего не рендерим
+    if (!data) return;
+    
+    // Показываем карточку, скрываем ошибку
+    document.getElementById('caseCard').style.display = 'block';
+    document.getElementById('errorContainer').style.display = 'none';
+    
     document.getElementById('clientNameDisplay').textContent = data.clientName || '—';
     document.getElementById('caseTitleDisplay').textContent = data.caseName || '—';
 
@@ -1042,6 +1113,10 @@
 
   async function fetchAndRender() {
     const data = await loadData();
+    
+    // Если данные не загрузились (ошибка), не продолжаем
+    if (!data) return;
+    
     const h = hashData(data);
     if (lastDataHash && h !== lastDataHash) {
       document.getElementById('caseCard').classList.add('flash-update');
@@ -1051,7 +1126,10 @@
     render(data);
   }
 
+  // Запускаем загрузку
   fetchAndRender();
+  
+  // Обновляем каждые 8 часов
   setInterval(fetchAndRender, 28800000); // 8 часов
 })();
 </script>
