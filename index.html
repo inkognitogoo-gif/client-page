@@ -694,8 +694,7 @@
   // Используем ID из URL 
   const ACTUAL_BIN_ID = BIN_ID;
   
-  const API_KEY = '$2a$10$YvnYK1Cpzh4XADw4YOLGzON7/XE0yY3PywOinHRc9HVOkwXjuosny';
-  const BASE_URL = 'https://api.jsonbin.io/v3/b';
+  const BASE_URL = 'https://getpantry.cloud/apiv1/public';
 
   let previewData = null;
   if (window.location.search.includes('preview')) {
@@ -718,18 +717,19 @@
     }
     
     try {
-      const r = await fetch(`${BASE_URL}/${ACTUAL_BIN_ID}/latest`, { 
-        headers: { 'X-Access-Key': API_KEY } 
+      const r = await fetch(`${BASE_URL}/${ACTUAL_BIN_ID}`, { 
+       method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
       });
-      
+
       if (!r.ok) {
         if (r.status === 404 || r.status === 400) {
           throw new Error('BIN_NOT_FOUND');
         }
         throw new Error('FETCH_ERROR');
       }
-      
-      return (await r.json()).record;
+
+      return  await r.json();
     } catch(e) {
       console.error('Ошибка загрузки данных:', e);
       
