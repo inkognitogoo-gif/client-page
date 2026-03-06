@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Подключение Supabase SDK -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <style>
     /* ========== СТИЛИ (полностью идентичны предыдущей версии) ========== */
     :root {
@@ -687,14 +689,29 @@
 
 <script>
 (function() {
+
+
+
+
+
+
+// ===== ПОДКЛЮЧЕНИЕ К SUPABASE =====
+  const SUPABASE_URL = 'https://xexmikndzstochlijlkw.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_Y2_etX93tafWHrRM7ghnuA_x0VTBgPJ';
+  
+  // Создаем экземпляр Supabase клиента
+  const { createClient } = window.supabase; // Для работы нужно подключить SDK
+  
+  // Проверяем, подключен ли Supabase SDK
+  if (!createClient) {
+    console.error('Supabase SDK не подключен! Добавьте в <head>:');
+  }
+  
+  const supabase = createClient?.(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
   // ===== ПОЛУЧАЕМ ID ИЗ URL =====
   const urlParams = new URLSearchParams(window.location.search);
-  const BIN_ID = urlParams.get('id');
-  
-  // Используем ID из URL 
-  const ACTUAL_BIN_ID = BIN_ID;
-  
-  const BASE_URL = 'https://getpantry.cloud/apiv1/public';
+  const TOKEN = urlParams.get('id'); // Добавляем получение токена из URL
 
   let previewData = null;
   if (window.location.search.includes('preview')) {
@@ -707,56 +724,87 @@
 
   let lastDataHash = '';
 
-  async function loadData() {
+async function loadData() {
     // Если есть previewData, возвращаем его
     if (previewData) return previewData;
     
-    // Если ID не указан, используем дефолтный (но предупреждаем)
-    if (!BIN_ID) {
-      console.warn('Параметр id не указан в URL. Используется кейс по умолчанию.');
+
+    
+    // Если нет токена, но может быть открытый доступ (опционально)
+    if (!TOKEN) {
+      console.warn('Токен не указан в URL, возможно ограниченный доступ');
     }
     
     try {
-      const r = await fetch(`${BASE_URL}/${ACTUAL_BIN_ID}`, { 
-       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-      });
 
-      if (!r.ok) {
-        if (r.status === 404 || r.status === 400) {
+      let query = supabase
+        .from('bins')
+        .select('*')
+        .eq('secret_token', TOKEN);
+      
+
+      
+      const { data, error } = await query.single(); // single() ожидает одну запись
+      
+      if (error) {
+        console.error('Ошибка Supabase:', error);
+        
+        if (error.code === 'PGRST116' || error.message.includes('multiple (or 0) rows')) {
           throw new Error('BIN_NOT_FOUND');
+        } else if (error.code === '42501' || error.message.includes('permission denied')) {
+          throw new Error('PERMISSION_DENIED');
+        } else {
+          throw new Error('FETCH_ERROR');
         }
-        throw new Error('FETCH_ERROR');
       }
-
-      return  await r.json();
+      
+console.warn(data.json_data);
+      return data.json_data;
+      
     } catch(e) {
       console.error('Ошибка загрузки данных:', e);
-      
-      // Показываем сообщение об ошибке пользователю
-      const caseCard = document.getElementById('caseCard');
-      const errorContainer = document.getElementById('errorContainer');
-      
-      if (caseCard) caseCard.style.display = 'none';
-      if (errorContainer) {
-        errorContainer.style.display = 'block';
-        
-        // Настраиваем текст в зависимости от ошибки
-        const errorTitle = errorContainer.querySelector('h2');
-        const errorText = errorContainer.querySelector('p');
-        
-        if (e.message === 'BIN_NOT_FOUND') {
-          if (errorTitle) errorTitle.textContent = 'Кейс не найден';
-          if (errorText) errorText.textContent = 'Кейс с указанным ID не существует. Проверьте ссылку.';
-        } else {
-          if (errorTitle) errorTitle.textContent = 'Ошибка загрузки';
-          if (errorText) errorText.textContent = 'Не удалось загрузить данные. Попробуйте позже.';
-        }
-      }
-      
-      // Возвращаем null, чтобы рендер не выполнялся
+      showError(e.message, getErrorMessage(e.message));
       return null;
     }
+  }
+  
+  
+  
+  // Функция для отображения ошибок
+  function showError(errorType, message) {
+    const caseCard = document.getElementById('caseCard');
+    const errorContainer = document.getElementById('errorContainer');
+    
+    if (caseCard) caseCard.style.display = 'none';
+    if (errorContainer) {
+      errorContainer.style.display = 'block';
+      
+      const errorTitle = errorContainer.querySelector('h2');
+      const errorText = errorContainer.querySelector('p');
+      
+      switch(errorType) {
+        case 'BIN_NOT_FOUND':
+          if (errorTitle) errorTitle.textContent = 'Кейс не найден';
+          if (errorText) errorText.textContent = message || 'Кейс с указанным ID не существует. Проверьте ссылку.';
+          break;
+        case 'PERMISSION_DENIED':
+          if (errorTitle) errorTitle.textContent = 'Доступ запрещен';
+          if (errorText) errorText.textContent = message || 'У вас нет прав на просмотр этого кейса. Проверьте токен доступа.';
+          break;
+        default:
+          if (errorTitle) errorTitle.textContent = 'Ошибка загрузки';
+          if (errorText) errorText.textContent = message || 'Не удалось загрузить данные. Попробуйте позже.';
+      }
+    }
+  }
+  
+  function getErrorMessage(errorType) {
+    const messages = {
+      'BIN_NOT_FOUND': 'Кейс с указанным ID не существует. Проверьте ссылку.',
+      'PERMISSION_DENIED': 'У вас нет прав на просмотр этого кейса. Возможно, нужен токен доступа.',
+      'FETCH_ERROR': 'Не удалось загрузить данные. Проверьте подключение к интернету.'
+    };
+    return messages[errorType] || 'Произошла неизвестная ошибка';
   }
 
   function statusText(s) {
