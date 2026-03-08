@@ -7,8 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Подключение Supabase SDK -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <style>
-    /* ========== СТИЛИ (возвращены к предыдущей стабильной версии) ========== */
+    /* ========== СТИЛИ (полностью идентичны предыдущей версии) ========== */
     :root {
       --primary: #1BA1FA;
       --primary-dark: #0B7FD4;
@@ -18,7 +20,6 @@
       --green-light: #ECFDF5;
       --green-dark: #059669;
       --amber: #F59E0B;
-      --amber-light: #FEF3C7;
       --surface: #FFFFFF;
       --bg: #F3F6FA;
       --bg-subtle: #EDF1F7;
@@ -48,7 +49,7 @@
     }
 
     .brand-bar {
-      max-width: 920px;
+      max-width: 1200px;
       margin: 0 auto 20px;
       padding: 0 4px;
       animation: fadeDown 0.5s ease-out;
@@ -61,6 +62,12 @@
       text-decoration: none;
     }
 
+    .brand-logo img {
+      height: 32px;
+      width: auto;
+      max-width: 200px;
+    }
+
     .brand-logo-text {
       font-weight: 800;
       font-size: 1.3rem;
@@ -71,7 +78,7 @@
     .brand-logo-text span { color: var(--text-muted); font-weight: 600; }
 
     .case-card {
-      max-width: 920px;
+      max-width: 1200px;
       margin: 0 auto;
       background: var(--surface);
       border-radius: var(--radius-xl);
@@ -341,13 +348,22 @@
       line-height: 1.5;
       flex-grow: 1;
     }
-
+    
+    /* Стили для форматированного текста */
     .stage-details-h ul, .stage-details-h ol {
       padding-left: 20px;
       margin: 8px 0;
     }
-    .stage-details-h strong { font-weight: 700; color: var(--text-primary); }
-    .stage-details-h em { font-style: italic; }
+    .stage-details-h li {
+      margin-bottom: 4px;
+    }
+    .stage-details-h strong {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .stage-details-h em {
+      font-style: italic;
+    }
 
     .stage-footer-h {
       margin-top: 12px;
@@ -362,13 +378,12 @@
       gap: 5px;
       font-weight: 600;
       font-size: 0.8rem;
-      color: var(--primary-dark);
     }
 
-    .date-info svg { width: 14px; height: 14px; }
+    .date-info svg { width: 14px; height: 14px; flex-shrink: 0; }
 
     .manager-comment {
-      margin-top: 10px;
+      margin-top: 0px;
       padding: 10px 14px;
       background: rgba(27,161,250,0.06);
       border-radius: var(--radius-sm);
@@ -376,6 +391,11 @@
       font-size: 0.8rem;
       color: var(--text-secondary);
       line-height: 1.5;
+    }
+    
+    .manager-comment ul, .manager-comment ol {
+      padding-left: 20px;
+      margin: 8px 0;
     }
 
     .manager-comment-label {
@@ -395,7 +415,7 @@
       color: var(--primary-dark);
       text-decoration: none;
       border: 1px solid var(--primary);
-      align-self: flex-start;
+      align-self: flex-end;
     }
     .materials-link:hover { background: var(--primary); color: white; }
 
@@ -458,6 +478,11 @@
       font-size: 0.88rem; color: var(--text-secondary);
       line-height: 1.55; display: block;
     }
+    
+    .stage-v-details ul, .stage-v-details ol {
+      padding-left: 20px;
+      margin: 8px 0;
+    }
 
     .stage-v-footer {
       margin-top: 12px;
@@ -469,7 +494,7 @@
     .case-footer {
       padding: 0 32px 28px;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       gap: 12px;
     }
@@ -486,12 +511,6 @@
       animation: pulse 2s ease-in-out infinite;
       flex-shrink: 0;
     }
-
-    .footer-link {
-      font-size: 0.78rem; color: var(--primary);
-      text-decoration: none; font-weight: 600;
-    }
-    .footer-link:hover { text-decoration: underline; }
 
     /* Mobile */
     @media (max-width: 768px) {
@@ -551,7 +570,7 @@
       scrollbar-color: var(--border) transparent;
     }
 
-    .stages-horizontal.scrollable .stage-card-h { flex: 0 0 200px; }
+    .stages-horizontal.scrollable .stage-card-h { flex: 0 0 240px; }
 
     @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
     @keyframes fadeDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
@@ -566,17 +585,41 @@
       70% { box-shadow: 0 0 0 8px rgba(27,161,250,0); }
       100% { box-shadow: none; }
     }
+
+    /* Сообщение об ошибке */
+    .error-message {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 40px 20px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+      color: var(--text-secondary);
+    }
+    
+    .error-message h2 {
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    
+    .error-message a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .error-message a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
 
 <div class="brand-bar">
   <a href="#" class="brand-logo">
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="8" fill="#1BA1FA"/>
-      <path d="M7 9h14M7 14h10M7 19h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-    </svg>
-    <div class="brand-logo-text">EMELIN<span>.PRO</span></div>
+    <img src="https://i127.fastpic.org/big/2026/0305/f0/6ae5fa7d2cd11672b3195a7cda0a8cf0.png" alt="Emelin.Pro" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+    <div class="brand-logo-text" style="display:none;">EMELIN<span>.PRO</span></div>
   </a>
 </div>
 
@@ -631,46 +674,137 @@
       <div class="update-dot"></div>
       <span id="updateTime">Загрузка…</span>
     </div>
-    <a href="#" class="footer-link">emelin.pro</a>
   </div>
 
 </div>
 
+<!-- Контейнер для сообщения об ошибке (скрыт по умолчанию) -->
+<div id="errorContainer" style="display: none;">
+  <div class="error-message">
+    <h2>Кейс не найден</h2>
+    <p>Проверьте ссылку или обратитесь к вашему менеджеру.</p>
+    <p><a href="#" onclick="location.reload()">Попробовать снова</a></p>
+  </div>
+</div>
+
 <script>
 (function() {
-  const BIN_ID = '69a5c886ae596e708f586c95';
-  const API_KEY = '$2a$10$04rxd6FFWKwU6F5lh7rxfepeHDiMl50NHzePfFIwq71to/inJGDgW';
-  const BASE_URL = 'https://api.jsonbin.io/v3/b';
 
-  const defaultData = {
-    caseName: 'Стратегический аудит ситуации и выбор модели исполнения обязательств',
-    clientName: 'Концедалов С.И.',
-    expert: {
-      name: 'Иван Петров',
-      avatar: '',
-      phone: '+7 (999) 123-45-67',
-      telegram: 'ivan_petrov',
-      whatsapp: '79991234567'
-    },
-    stages: [
-      { id:0, title:'Брифинг и анализ задачи', description:'Клиентский менеджер уточняет основные моменты задачи и ожидания по результату.', summary:'Проведён первичный бриф, зафиксированы цели.', nextActions:'Ожидайте коммерческое предложение.', status:'completed', startDate:'2026-03-01', endDate:'2026-03-02', materials:'' },
-      { id:1, title:'Подготовка коммерческого предложения', description:'Менеджер готовит КП на основе брифа, берёт тайм-аут.', summary:'КП подготовлено и направлено клиенту.', nextActions:'Рассмотрите предложение и дайте обратную связь.', status:'completed', startDate:'2026-03-03', endDate:'2026-03-05', materials:'https://example.com/kp.pdf' },
-      { id:2, title:'Согласование и оплата', description:'Подписание соглашения, фиксация договорённостей, внесение установочного платежа или ретейнера.', summary:'Договор подписан, оплата поступила.', nextActions:'После оплаты передайте документы и информацию.', status:'active', startDate:'2026-03-06', endDate:'2026-03-09', materials:'' },
-      { id:3, title:'Передача информации', description:'Клиент предоставляет необходимые документы, даёт пояснения.', summary:'Все материалы получены.', nextActions:'Передайте документы и пояснения эксперту.', status:'pending', startDate:'2026-03-10', endDate:'2026-03-12', materials:'' },
-      { id:4, title:'Экспертный анализ', description:'Эксперт изучает материалы, при необходимости задаёт уточняющие вопросы.', summary:'Анализ завершён, подготовлены выводы.', nextActions:'Эксперт свяжется для уточнений.', status:'pending', startDate:'2026-03-13', endDate:'2026-03-20', materials:'' },
-      { id:5, title:'Презентация результатов', description:'Эксперт представляет итоги анализа, модели поведения, рекомендованный вариант, передаёт письменный отчёт.', summary:'Презентация проведена, отчёт передан.', nextActions:'Ознакомьтесь с результатами, подготовьте вопросы.', status:'pending', startDate:'2026-03-21', endDate:'2026-03-22', materials:'https://example.com/presentation.pdf' },
-      { id:6, title:'Обратная связь', description:'Клиентский менеджер уточняет удовлетворённость работой эксперта и готовность к реализации.', summary:'Обратная связь получена, определены следующие шаги.', nextActions:'Сообщите ваши впечатления и планы.', status:'pending', startDate:'2026-03-23', endDate:'2026-03-24', materials:'' }
-    ]
-  };
+
+
+
+
+
+// ===== ПОДКЛЮЧЕНИЕ К SUPABASE =====
+  const SUPABASE_URL = 'https://xexmikndzstochlijlkw.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_Y2_etX93tafWHrRM7ghnuA_x0VTBgPJ';
+  
+  // Создаем экземпляр Supabase клиента
+  const { createClient } = window.supabase; // Для работы нужно подключить SDK
+  
+  // Проверяем, подключен ли Supabase SDK
+  if (!createClient) {
+    console.error('Supabase SDK не подключен! Добавьте в <head>:');
+  }
+  
+  const supabase = createClient?.(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  // ===== ПОЛУЧАЕМ ID ИЗ URL =====
+  const urlParams = new URLSearchParams(window.location.search);
+  const TOKEN = urlParams.get('id'); // Добавляем получение токена из URL
+
+  let previewData = null;
+  if (window.location.search.includes('preview')) {
+    const stored = localStorage.getItem('previewData');
+    if (stored) {
+      try { previewData = JSON.parse(stored); } catch(e) {}
+    }
+  }
+
 
   let lastDataHash = '';
 
-  async function loadData() {
+async function loadData() {
+    // Если есть previewData, возвращаем его
+    if (previewData) return previewData;
+    
+
+    
+    // Если нет токена, но может быть открытый доступ (опционально)
+    if (!TOKEN) {
+      console.warn('Токен не указан в URL, возможно ограниченный доступ');
+    }
+    
     try {
-      const r = await fetch(`${BASE_URL}/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
-      if (!r.ok) throw new Error();
-      return (await r.json()).record;
-    } catch(e) { return defaultData; }
+
+      let query = supabase
+        .from('bins')
+        .select('*')
+        .eq('secret_token', TOKEN);
+      
+
+      
+      const { data, error } = await query.single(); // single() ожидает одну запись
+      
+      if (error) {
+        console.error('Ошибка Supabase:', error);
+        
+        if (error.code === 'PGRST116' || error.message.includes('multiple (or 0) rows')) {
+          throw new Error('BIN_NOT_FOUND');
+        } else if (error.code === '42501' || error.message.includes('permission denied')) {
+          throw new Error('PERMISSION_DENIED');
+        } else {
+          throw new Error('FETCH_ERROR');
+        }
+      }
+      
+console.warn(data.json_data);
+      return data.json_data;
+      
+    } catch(e) {
+      console.error('Ошибка загрузки данных:', e);
+      showError(e.message, getErrorMessage(e.message));
+      return null;
+    }
+  }
+  
+  
+  
+  // Функция для отображения ошибок
+  function showError(errorType, message) {
+    const caseCard = document.getElementById('caseCard');
+    const errorContainer = document.getElementById('errorContainer');
+    
+    if (caseCard) caseCard.style.display = 'none';
+    if (errorContainer) {
+      errorContainer.style.display = 'block';
+      
+      const errorTitle = errorContainer.querySelector('h2');
+      const errorText = errorContainer.querySelector('p');
+      
+      switch(errorType) {
+        case 'BIN_NOT_FOUND':
+          if (errorTitle) errorTitle.textContent = 'Кейс не найден';
+          if (errorText) errorText.textContent = message || 'Кейс с указанным ID не существует. Проверьте ссылку.';
+          break;
+        case 'PERMISSION_DENIED':
+          if (errorTitle) errorTitle.textContent = 'Доступ запрещен';
+          if (errorText) errorText.textContent = message || 'У вас нет прав на просмотр этого кейса. Проверьте токен доступа.';
+          break;
+        default:
+          if (errorTitle) errorTitle.textContent = 'Ошибка загрузки';
+          if (errorText) errorText.textContent = message || 'Не удалось загрузить данные. Попробуйте позже.';
+      }
+    }
+  }
+  
+  function getErrorMessage(errorType) {
+    const messages = {
+      'BIN_NOT_FOUND': 'Кейс с указанным ID не существует. Проверьте ссылку.',
+      'PERMISSION_DENIED': 'У вас нет прав на просмотр этого кейса. Возможно, нужен токен доступа.',
+      'FETCH_ERROR': 'Не удалось загрузить данные. Проверьте подключение к интернету.'
+    };
+    return messages[errorType] || 'Произошла неизвестная ошибка';
   }
 
   function statusText(s) {
@@ -681,7 +815,6 @@
 
   function getInitials(n) { return n ? n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : '?'; }
 
-  // Функции для рабочих дней
   function countWorkingDays(start, end) {
     if (!start || !end) return null;
     const startDate = new Date(start + 'T00:00:00');
@@ -713,22 +846,6 @@
     return count;
   }
 
-  function remainingWorkingDays(end) {
-    if (!end) return null;
-    const endDate = new Date(end + 'T23:59:59');
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    if (today > endDate) return -1;
-    let count = 0;
-    const current = new Date(today);
-    while (current <= endDate) {
-      const day = current.getDay();
-      if (day !== 0 && day !== 6) count++;
-      current.setDate(current.getDate() + 1);
-    }
-    return count;
-  }
-
   function getOverallProgress(stages) {
     const dates = stages.reduce((acc, s) => {
       if (s.startDate) acc.push(new Date(s.startDate));
@@ -746,10 +863,14 @@
     return Math.round((elapsed / total) * 100);
   }
 
+  // Функция для преобразования текста с форматированием в HTML
   function formatText(text) {
     if (!text) return '';
+    
+    // Экранируем HTML-спецсимволы, чтобы избежать XSS
     let escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     
+    // Преобразуем маркированные списки (строки, начинающиеся с дефиса)
     const ulRegex = /(?:^|\n)- (.+?)(?=\n- |\n\n|$)/g;
     escaped = escaped.replace(ulRegex, (match, p1) => {
       const items = match.split('\n').map(line => {
@@ -759,6 +880,7 @@
       return '<ul>' + items.map(item => `<li>${item}</li>`).join('') + '</ul>';
     });
     
+    // Преобразуем нумерованные списки (строки, начинающиеся с цифры и точки)
     const olRegex = /(?:^|\n)\d+\. (.+?)(?=\n\d+\. |\n\n|$)/g;
     escaped = escaped.replace(olRegex, (match, p1) => {
       const items = match.split('\n').map(line => {
@@ -768,8 +890,14 @@
       return '<ol>' + items.map(item => `<li>${item}</li>`).join('') + '</ol>';
     });
     
+    // Жирный текст (**текст**)
     escaped = escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    
+    // Курсив (*текст*)
     escaped = escaped.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    
+    // Заменяем одиночные переносы строк на <br>, если они не внутри списков
+    // Это упрощённо; для более точной обработки нужен парсер
     escaped = escaped.replace(/\n/g, '<br>');
     
     return escaped;
@@ -837,14 +965,12 @@
     });
   }
 
-  // Обработка ошибки загрузки аватарки
   function handleAvatarError(img) {
     const parent = img.parentNode;
     const initials = parent.getAttribute('data-initials') || '?';
     parent.innerHTML = initials;
   }
 
-  // Sticky header
   let stickyObserver = null;
   function initSticky(count) {
     const header = document.getElementById('stickyHeader');
@@ -870,6 +996,13 @@
   }
 
   function render(data) {
+    // Если данные не загрузились, ничего не рендерим
+    if (!data) return;
+    
+    // Показываем карточку, скрываем ошибку
+    document.getElementById('caseCard').style.display = 'block';
+    document.getElementById('errorContainer').style.display = 'none';
+    
     document.getElementById('clientNameDisplay').textContent = data.clientName || '—';
     document.getElementById('caseTitleDisplay').textContent = data.caseName || '—';
 
@@ -927,6 +1060,11 @@
       card.style.animationDelay = `${i*0.08}s`;
 
       const formattedDescription = formatText(getDetailText(s));
+      
+      let expectationsHtml = '';
+      if (s.status === 'active' && s.nextActions) {
+        expectationsHtml = `<div class="manager-comment"><div class="manager-comment-label">Ожидания от клиента</div>${formatText(s.nextActions)}</div>`;
+      }
 
       let dateHtml = '';
       if (s.status === 'completed' && s.startDate && s.endDate) {
@@ -934,16 +1072,11 @@
       } else if (s.status === 'active') {
         const totalDays = countWorkingDays(s.startDate, s.endDate);
         const elapsed = elapsedWorkingDays(s.startDate);
-        const remaining = remainingWorkingDays(s.endDate);
-        if (totalDays !== null && elapsed !== null && remaining !== null) {
-          const remainingText = remaining === 0 ? 'сегодня' : `осталось ${remaining} рабочих дней`;
-          const forecastDate = new Date();
-          forecastDate.setDate(forecastDate.getDate() + remaining);
-          const forecastStr = forecastDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-          dateHtml = `<div class="date-info">${clockSvg} в работе ${elapsed} из ${totalDays} дней (${remainingText}, примерно до ${forecastStr})</div>`;
+        if (totalDays !== null && elapsed !== null) {
+          dateHtml = `<div class="date-info">${clockSvg} в работе ${elapsed} из ${totalDays} дней</div>`;
         }
       } else if (s.status === 'pending' && s.startDate) {
-        dateHtml = `<div class="date-info" style="color: var(--text-muted);">${clockSvg} начнётся ${formatDate(s.startDate)}</div>`;
+        dateHtml = `<div class="date-info" style="color: var(--text-muted);">${clockSvg} ${formatDate(s.startDate)}</div>`;
       }
 
       let materialsHtml = '';
@@ -957,8 +1090,9 @@
         <div class="stage-title-h">${s.title}</div>
         <div class="stage-details-h">${formattedDescription}</div>
         <div class="stage-footer-h">
-          ${dateHtml}
+          ${expectationsHtml}
           ${materialsHtml}
+          ${dateHtml}
         </div>
       `;
 
@@ -977,22 +1111,22 @@
 
       const formattedDescription = formatText(getDetailText(s));
 
+      let expectationsHtml = '';
+      if (s.status === 'active' && s.nextActions) {
+        expectationsHtml = `<div class="manager-comment"><div class="manager-comment-label">Ожидания от клиента</div>${formatText(s.nextActions)}</div>`;
+      }
+
       let dateHtml = '';
       if (s.status === 'completed' && s.startDate && s.endDate) {
         dateHtml = `<div class="date-info">${clockSvg} ${formatDateRange(s.startDate, s.endDate)}</div>`;
       } else if (s.status === 'active') {
         const totalDays = countWorkingDays(s.startDate, s.endDate);
         const elapsed = elapsedWorkingDays(s.startDate);
-        const remaining = remainingWorkingDays(s.endDate);
-        if (totalDays !== null && elapsed !== null && remaining !== null) {
-          const remainingText = remaining === 0 ? 'сегодня' : `осталось ${remaining} рабочих дней`;
-          const forecastDate = new Date();
-          forecastDate.setDate(forecastDate.getDate() + remaining);
-          const forecastStr = forecastDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-          dateHtml = `<div class="date-info">${clockSvg} в работе ${elapsed} из ${totalDays} дней (${remainingText}, примерно до ${forecastStr})</div>`;
+        if (totalDays !== null && elapsed !== null) {
+          dateHtml = `<div class="date-info">${clockSvg} в работе ${elapsed} из ${totalDays} дней</div>`;
         }
       } else if (s.status === 'pending' && s.startDate) {
-        dateHtml = `<div class="date-info" style="color: var(--text-muted);">${clockSvg} начнётся ${formatDate(s.startDate)}</div>`;
+        dateHtml = `<div class="date-info" style="color: var(--text-muted);">${clockSvg} ${formatDate(s.startDate)}</div>`;
       }
 
       let materialsHtml = '';
@@ -1009,8 +1143,9 @@
           </div>
           <div class="stage-v-details">${formattedDescription}</div>
           <div class="stage-v-footer">
-            ${dateHtml}
+            ${expectationsHtml}
             ${materialsHtml}
+            ${dateHtml}
           </div>
         </div>
       `;
@@ -1026,6 +1161,10 @@
 
   async function fetchAndRender() {
     const data = await loadData();
+    
+    // Если данные не загрузились (ошибка), не продолжаем
+    if (!data) return;
+    
     const h = hashData(data);
     if (lastDataHash && h !== lastDataHash) {
       document.getElementById('caseCard').classList.add('flash-update');
@@ -1035,8 +1174,11 @@
     render(data);
   }
 
+  // Запускаем загрузку
   fetchAndRender();
-  setInterval(fetchAndRender, 300000); // 5 минут
+  
+  // Обновляем каждые 8 часов
+  setInterval(fetchAndRender, 28800000); // 8 часов
 })();
 </script>
 </body>
